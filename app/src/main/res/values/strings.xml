@@ -20,6 +20,53 @@
     <string name="status_on">Плашки с переводом появляются поверх английского текста.</string>
     <string name="status_paused">Перевод на паузе.</string>
 
+    <string name="open_settings">Настройки</string>
+
+    <string name="mode_replace">Заменить</string>
+    <string name="mode_replace_body">Непрозрачная плашка закрывает оригинал.</string>
+    <string name="mode_overlay">Поверх</string>
+    <string name="mode_overlay_body">Полупрозрачная плашка, оригинал немного просвечивает.</string>
+    <string name="mode_hint">Подсказка</string>
+    <string name="mode_hint_body">Маленькая плашка под оригиналом, сам текст не закрывается.</string>
+
+    <string name="bubble_ocr_later">Перевести картинку (на этапе 4)</string>
+    <string name="bubble_pause_app">Пауза в «%1$s»</string>
+    <string name="bubble_resume_app">Снять паузу в «%1$s»</string>
+    <string name="bubble_full_text">Весь перевод на экране</string>
+    <string name="bubble_settings">Настройки</string>
+
+    <string name="settings_title">Настройки</string>
+    <string name="settings_section_translation">Перевод</string>
+    <string name="settings_enabled">Перевод экрана</string>
+    <string name="settings_enabled_body">То же, что плитка в шторке и нажатие на плавающую кнопку.</string>
+    <string name="settings_economy">Экономия</string>
+    <string name="settings_economy_body">Экран переводится только по нажатию на плавающую кнопку, а не всё время. При прокрутке перевод убирается. Бережёт батарею.</string>
+    <string name="settings_editable">Переводить поля ввода</string>
+    <string name="settings_editable_body">Текст, который вы печатаете, тоже закрывается плашками. Пароли не читаются никогда.</string>
+    <string name="settings_threads">Потоки модели</string>
+    <string name="settings_threads_body">4 потока переводят быстрее, но сильнее грузят процессор и батарею.</string>
+    <string name="settings_threads_value">%1$d потока</string>
+    <string name="settings_section_plaques">Плашки</string>
+    <string name="settings_mode">Режим</string>
+    <string name="settings_opacity">Непрозрачность: %1$d%%</string>
+    <string name="settings_color">Цвет</string>
+    <string name="color_system">Как тема телефона</string>
+    <string name="color_light">Всегда светлые</string>
+    <string name="color_dark">Всегда тёмные</string>
+    <string name="settings_min_text">Минимальный размер шрифта: %1$d</string>
+    <string name="settings_section_bubble">Плавающая кнопка</string>
+    <string name="settings_bubble">Показывать кнопку</string>
+    <string name="settings_bubble_body">Нажатие включает и выключает перевод, долгое нажатие открывает меню. Можно скрыть, если хватает плитки в шторке. Режиму «Экономия» кнопка нужна.</string>
+    <string name="settings_section_exclusions">Исключения</string>
+    <string name="settings_exclusions_body">В этих приложениях ScreenLate не читает экран и ничего не переводит.</string>
+    <string name="settings_exclusions_button">Выбрать приложения (%1$d)</string>
+    <string name="settings_section_model">Модель</string>
+    <string name="settings_model_missing">Модель не скачана.</string>
+
+    <string name="exclusions_title">Исключения</string>
+    <string name="exclusions_search">Поиск</string>
+    <string name="exclusions_loading">Загрузка списка приложений…</string>
+
     <string name="test_title">Проверить перевод</string>
     <string name="test_hint">Английский текст</string>
     <string name="test_sample" translatable="false">Hello! Turn on notifications to get updates.</string>

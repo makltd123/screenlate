@@ -9,9 +9,22 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.view.accessibility.AccessibilityWindowInfo
 import android.view.inputmethod.InputMethodManager
 
-/** Packages whose events and windows are never read: this app, the system UI and keyboards. */
+/**
+ * Packages whose events and windows are never read: this app, the system UI and keyboards always,
+ * plus the user's exclusion list and apps paused from the floating button.
+ */
 class PackagePolicy(private val ignored: Set<String>) {
-    fun isIgnored(packageName: String?): Boolean = packageName == null || packageName in ignored
+    @Volatile
+    var excluded: Set<String> = emptySet()
+
+    @Volatile
+    var paused: Set<String> = emptySet()
+
+    fun isIgnored(packageName: String?): Boolean =
+        packageName == null || packageName in ignored || packageName in excluded || packageName in paused
+
+    /** Never read regardless of user settings. */
+    fun isSystem(packageName: String?): Boolean = packageName == null || packageName in ignored
 
     companion object {
         private const val SYSTEM_UI = "com.android.systemui"
@@ -36,6 +49,9 @@ class ScreenTextCollector(
     private val service: AccessibilityService,
     private val packages: PackagePolicy,
 ) {
+    @Volatile
+    var translateEditable = false
+
     fun collect(): ScreenText {
         val found = ArrayList<RawText>()
         // Area already taken by windows above the one being walked; text under it is not visible.
@@ -65,7 +81,7 @@ class ScreenTextCollector(
                 covered.union(windowBounds)
             }
         }
-        return ScreenText(TextItems.prepare(found), windowCount, occluded)
+        return ScreenText(TextItems.prepare(found, TextFilter::shouldTranslate), windowCount, occluded)
     }
 
     /** Depth-first walk in on-screen order. Returns how many text nodes were hidden under higher windows. */
@@ -78,10 +94,13 @@ class ScreenTextCollector(
         while (stack.isNotEmpty() && visited < MAX_NODES_PER_WINDOW) {
             val (node, depth) = stack.removeLast()
             visited++
-            // Passwords and input fields are never read, and neither is anything nested inside them.
-            if (!node.isVisibleToUser || node.isPassword || node.isEditable) continue
+            // Passwords are never read, and neither is anything nested inside them; input fields only on request.
+            if (!node.isVisibleToUser || node.isPassword || (node.isEditable && !translateEditable)) continue
 
-            val text = readText(node)
+            // Web text runs are kept even when not English on their own ("1996", "), "), so a
+            // paragraph glued from them stays whole; the glued text is checked afterwards.
+            val inline = node.className == WEB_VIEW_CLASS
+            val text = readText(node, inline)
             if (text != null) {
                 node.getBoundsInScreen(bounds)
                 when {
@@ -93,6 +112,7 @@ class ScreenTextCollector(
                         text = text,
                         bounds = ScreenRect(bounds.left, bounds.top, bounds.right, bounds.bottom),
                         packageName = node.packageName?.toString().orEmpty(),
+                        inline = inline,
                     )
                 }
             }
@@ -106,12 +126,13 @@ class ScreenTextCollector(
         return occluded
     }
 
-    private fun readText(node: AccessibilityNodeInfo): String? {
+    private fun readText(node: AccessibilityNodeInfo, inline: Boolean): String? {
+        val accept: (String) -> Boolean = { inline || TextFilter.shouldTranslate(it) }
         val text = node.text?.toString()
-        if (!text.isNullOrBlank()) return text.takeIf(TextFilter::shouldTranslate)
+        if (!text.isNullOrBlank()) return text.takeIf(accept)
         // Containers' descriptions usually repeat their children, so only leaves contribute one.
         if (node.childCount > 0) return null
-        return node.contentDescription?.toString()?.takeIf { it.isNotBlank() && TextFilter.shouldTranslate(it) }
+        return node.contentDescription?.toString()?.takeIf { it.isNotBlank() && accept(it) }
     }
 
     private fun intersects(covered: Region, rect: Rect): Boolean =
@@ -123,6 +144,8 @@ class ScreenTextCollector(
                 window.type == AccessibilityWindowInfo.TYPE_MAGNIFICATION_OVERLAY)
 
     private companion object {
+        /** Chrome and WebView report page elements, text runs and links alike, with this class. */
+        const val WEB_VIEW_CLASS = "android.view.View"
         const val MAX_NODES_PER_WINDOW = 1500
         const val MAX_DEPTH = 64
         const val MIN_SIDE_PX = 4

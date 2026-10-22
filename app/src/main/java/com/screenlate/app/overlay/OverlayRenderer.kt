@@ -9,6 +9,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.FrameLayout
 import com.screenlate.app.diagnostics.Diagnostics
+import com.screenlate.app.settings.DisplayMode
 
 /**
  * Owns the single full-screen overlay window and keeps its plaques in sync with the screen.
@@ -20,8 +21,14 @@ class OverlayRenderer(private val context: Context) {
     private val shown = HashMap<String, Plaque>()
     private val views = HashMap<String, PlaqueView>()
     private val spare = ArrayList<PlaqueView>()
-    private var style = PlaqueStyle.from(context.resources.configuration)
+    private var configuration = Configuration(context.resources.configuration)
+    private var style = OverlayStyle()
+    private var colors = PlaqueStyle.from(configuration, style)
     private val origin = IntArray(2)
+
+    /** Translations currently on screen, top to bottom, for the floating button's full-text view. */
+    val visibleTexts: List<String>
+        get() = shown.values.sortedWith(compareBy({ it.bounds.top }, { it.bounds.left })).map { it.text }
 
     /** Updates only the plaques that appeared, moved, changed text or disappeared, so nothing flickers. */
     fun render(plaques: List<Plaque>) {
@@ -61,15 +68,27 @@ class OverlayRenderer(private val context: Context) {
         root = null
     }
 
-    fun onConfigurationChanged(configuration: Configuration) {
-        style = PlaqueStyle.from(configuration)
-        val container = root ?: return
-        for (i in 0 until container.childCount) {
-            (container.getChildAt(i) as PlaqueView).applyStyle(style)
-        }
+    fun setStyle(newStyle: OverlayStyle) {
+        if (newStyle == style) return
+        style = newStyle
+        restyle()
     }
 
-    /** Converts screen bounds to overlay coordinates, clipped to the overlay. */
+    fun onConfigurationChanged(newConfiguration: Configuration) {
+        configuration = Configuration(newConfiguration)
+        restyle()
+    }
+
+    private fun restyle() {
+        colors = PlaqueStyle.from(configuration, style)
+        val container = root ?: return
+        for (i in 0 until container.childCount) {
+            (container.getChildAt(i) as PlaqueView).applyStyle(colors)
+        }
+        repositionAll(container)
+    }
+
+    /** Converts screen bounds to overlay coordinates, clipped to the overlay. A hint goes under its text. */
     private fun place(container: FrameLayout, view: PlaqueView, plaque: Plaque) {
         var left = plaque.bounds.left - origin[0]
         var top = plaque.bounds.top - origin[1]
@@ -81,11 +100,12 @@ class OverlayRenderer(private val context: Context) {
             right = right.coerceAtMost(container.width)
             bottom = bottom.coerceAtMost(container.height)
         }
-        if (right - left < 1 || bottom - top < 1) {
+        val hint = style.mode == DisplayMode.Hint
+        if (right - left < 1 || bottom - top < 1 || (hint && container.height > 0 && bottom >= container.height)) {
             view.visibility = View.GONE
             return
         }
-        view.place(plaque.text, left, top, right - left, bottom - top)
+        view.place(plaque, left, if (hint) bottom else top, right - left, bottom - top, style)
     }
 
     private fun repositionAll(container: FrameLayout) {
@@ -97,7 +117,7 @@ class OverlayRenderer(private val context: Context) {
 
     private fun obtain(container: FrameLayout): PlaqueView =
         spare.removeLastOrNull() ?: PlaqueView(context).also {
-            it.applyStyle(style)
+            it.applyStyle(colors)
             container.addView(it, FrameLayout.LayoutParams(0, 0))
         }
 

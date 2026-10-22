@@ -2,7 +2,6 @@ package com.screenlate.app.ui
 
 import android.Manifest
 import android.os.Build
-import android.os.SystemClock
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,7 +21,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -50,7 +48,7 @@ import com.screenlate.app.settings.SettingsRepository
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen(onOpenDiagnostics: () -> Unit) {
+fun HomeScreen(onOpenSettings: () -> Unit, onOpenDiagnostics: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val app = remember { context.services }
@@ -91,7 +89,9 @@ fun HomeScreen(onOpenDiagnostics: () -> Unit) {
                 onToggle = { value -> scope.launch { settings.setEnabled(value) } },
             )
 
-            if (modelReady) TestTranslation()
+            Button(onClick = onOpenSettings, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.open_settings))
+            }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 OutlinedButton(onClick = { SystemScreens.requestTile(context) }, modifier = Modifier.fillMaxWidth()) {
@@ -133,47 +133,6 @@ fun HomeScreen(onOpenDiagnostics: () -> Unit) {
                     .pointerInput(onOpenDiagnostics) { detectTapGestures(onLongPress = { onOpenDiagnostics() }) }
                     .padding(8.dp),
             )
-        }
-    }
-}
-
-/** A text field to try the model directly; shows the translation and how long it took. */
-@Composable
-private fun TestTranslation() {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    val sample = stringResource(R.string.test_sample)
-    var input by rememberSaveable { mutableStateOf(sample) }
-    var result by rememberSaveable { mutableStateOf("") }
-    var busy by remember { mutableStateOf(false) }
-
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(text = stringResource(R.string.test_title), style = MaterialTheme.typography.titleMedium)
-            OutlinedTextField(
-                value = input,
-                onValueChange = { input = it },
-                label = { Text(stringResource(R.string.test_hint)) },
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Button(
-                enabled = !busy && input.isNotBlank(),
-                onClick = {
-                    busy = true
-                    scope.launch {
-                        val started = SystemClock.elapsedRealtime()
-                        result = runCatching { context.services.repository.translateText(input) }
-                            .map { "$it\n" + context.getString(R.string.test_time, SystemClock.elapsedRealtime() - started) }
-                            .getOrElse { context.getString(R.string.test_failed, it.javaClass.simpleName) }
-                        busy = false
-                    }
-                },
-            ) {
-                Text(stringResource(R.string.action_translate))
-            }
-            if (result.isNotEmpty()) {
-                Text(text = result, style = MaterialTheme.typography.bodyLarge)
-            }
         }
     }
 }

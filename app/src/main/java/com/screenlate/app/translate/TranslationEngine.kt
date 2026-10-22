@@ -18,7 +18,7 @@ class ModelNotReadyException : IllegalStateException("translation model is not i
  */
 class TranslationEngine(
     private val modelDir: () -> File?,
-    private val threads: Int = DEFAULT_THREADS,
+    private var threads: Int = DEFAULT_THREADS,
 ) : Translator {
     private val dispatcher = Dispatchers.Default.limitedParallelism(1)
     private val scope = CoroutineScope(SupervisorJob() + dispatcher)
@@ -44,6 +44,14 @@ class TranslationEngine(
                 close()
             }
         }
+    }
+
+    /** Takes effect from the next translation; the loaded model is closed so it reopens with [count] threads. */
+    suspend fun setThreads(count: Int) = withContext(dispatcher) {
+        if (count == threads) return@withContext
+        threads = count
+        idleUnload?.cancel()
+        close()
     }
 
     suspend fun unload() = withContext(dispatcher) {
