@@ -16,13 +16,13 @@ class ScreenLateApplication : Application() {
 
 /** Process-wide objects shared by the accessibility service, the tile and the UI. */
 class AppServices(context: Context) {
-    val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-    private val database = AppDatabase.create(context)
-    val engine = TranslationEngine(modelDir = { modelManager.readyDir() })
-    val repository = TranslationRepository(database.translations(), engine)
+    val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private val database: AppDatabase = AppDatabase.create(context)
+    val engine: TranslationEngine = TranslationEngine(modelDir = { modelManager.readyDir() })
+    val repository: TranslationRepository = TranslationRepository(database.translations(), engine)
 
     // A new or removed model invalidates the loaded session and every cached translation.
-    val modelManager = ModelManager(context, scope) {
+    val modelManager: ModelManager = ModelManager(context, scope) {
         engine.unload()
         repository.clear()
     }
