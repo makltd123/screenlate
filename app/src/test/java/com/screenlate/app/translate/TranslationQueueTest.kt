@@ -4,7 +4,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -22,11 +21,17 @@ class TranslationQueueTest {
         onFailure = { throw it },
     )
 
+    /** advanceUntilIdle ignores backgroundScope work, so move virtual time on explicitly. */
+    private fun TestScope.finish() {
+        advanceTimeBy(10_000)
+        runCurrent()
+    }
+
     @Test
     fun translatesInScreenOrder() = runTest {
         val done = mutableListOf<String>()
         queue(done).replace(listOf("a", "b", "c"))
-        advanceUntilIdle()
+        finish()
         assertEquals(listOf("a", "b", "c"), done)
     }
 
@@ -38,7 +43,7 @@ class TranslationQueueTest {
         advanceTimeBy(50)
         runCurrent()
         queue.replace(listOf("c"))
-        advanceUntilIdle()
+        finish()
         assertEquals(listOf("c"), done)
     }
 
@@ -50,7 +55,7 @@ class TranslationQueueTest {
         advanceTimeBy(50)
         runCurrent()
         queue.replace(listOf("a", "c"))
-        advanceUntilIdle()
+        finish()
         assertEquals(listOf("a", "c"), done)
     }
 }
