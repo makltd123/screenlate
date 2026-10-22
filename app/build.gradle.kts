@@ -84,6 +84,7 @@ android {
 tasks.withType<Test>().configureEach {
     testLogging {
         events("passed", "skipped", "failed")
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
         showStandardStreams = true
     }
     System.getenv("SCREENLATE_HOST_NATIVE_DIR")?.let { systemProperty("java.library.path", it) }
