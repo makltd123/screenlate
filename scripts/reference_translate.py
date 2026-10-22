@@ -10,6 +10,7 @@ model; run on its own it regenerates the files the Android tests compare against
 import argparse
 import difflib
 import json
+import re
 import time
 from pathlib import Path
 
@@ -21,6 +22,26 @@ REVISION = "bb09c99d180016eac6819df3dae68edb1690fdee"
 PAD_ID = 62517  # also the decoder start token; never generated
 EOS_ID = 0
 PHRASES = Path(__file__).with_name("reference_phrases.json")
+
+
+# Must match SentenceSplitter.kt: the app translates sentence by sentence, so the reference does too.
+SENTENCE_END = re.compile(r"([.!?…]+[\"'”’)\]]*)(\s+)(?=[\"'“‘(\[]?[A-Z0-9])")
+ABBREVIATIONS = {"mr", "mrs", "ms", "dr", "prof", "sr", "jr", "st", "vs", "etc", "e.g", "i.e", "inc", "ltd", "co", "no", "fig", "u.s", "u.k"}
+
+
+def split_sentences(text: str) -> list[tuple[str, str]]:
+    """Splits text into (sentence, whitespace that follows it) pairs."""
+    parts = []
+    start = 0
+    for match in SENTENCE_END.finditer(text):
+        before = text[start:match.start()].split()
+        last_word = before[-1] if before else ""
+        if match.group(1).startswith(".") and (last_word.lower() in ABBREVIATIONS or (len(last_word) == 1 and last_word.isalpha())):
+            continue
+        parts.append((text[start:match.end(1)], match.group(2)))
+        start = match.end()
+    parts.append((text[start:], ""))
+    return parts
 
 
 def max_new_tokens(input_length: int) -> int:
@@ -84,7 +105,11 @@ class OnnxGreedyTranslator:
             if token == EOS_ID:
                 break
             result.append(token)
-            past = {name: outputs[name.replace("past_key_values.", "present.")] for name in self.past_names}
+            # Cross-attention keys/values come from the first step only; in the cache branch the
+            # merged decoder returns placeholders for them, so only the self-attention cache moves on.
+            for name in self.past_names:
+                if not use_cache or ".decoder." in name:
+                    past[name] = outputs[name.replace("past_key_values.", "present.")]
             use_cache = True
         return result
 
@@ -142,21 +167,26 @@ def translation_reference(model_dir: Path, tokenizer, torch_model) -> list[dict]
     translator = OnnxGreedyTranslator(model_dir)
     rows = []
     for text in load_phrases()["translate"]:
-        input_ids = tokenizer(text).input_ids
-        started = time.perf_counter()
-        output_ids = translator.translate_ids(input_ids)
-        millis = (time.perf_counter() - started) * 1000
-        onnx_text = decode(tokenizer, output_ids)
-        torch_text = torch_translate(torch_model, tokenizer, text)
+        sentences = []
+        onnx_text = torch_text = ""
+        millis = 0.0
+        for sentence, gap in split_sentences(text):
+            input_ids = tokenizer(sentence).input_ids
+            started = time.perf_counter()
+            output_ids = translator.translate_ids(input_ids)
+            millis += (time.perf_counter() - started) * 1000
+            translated = decode(tokenizer, output_ids)
+            sentences.append({"text": sentence, "input_ids": input_ids, "output_ids": output_ids, "onnx": translated})
+            onnx_text += translated + gap
+            torch_text += torch_translate(torch_model, tokenizer, sentence) + gap
         rows.append(
             {
                 "text": text,
-                "input_ids": input_ids,
-                "output_ids": output_ids,
                 "onnx": onnx_text,
                 "torch": torch_text,
                 "word_difference": word_difference(onnx_text, torch_text),
                 "millis": round(millis, 1),
+                "sentences": sentences,
             }
         )
     return rows
