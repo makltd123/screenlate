@@ -1,11 +1,14 @@
 package com.screenlate.app.translate
 
-/** Translates English strings to Russian. Returns exactly one result per input, in the same order. */
+/**
+ * Translates one English sentence to Russian. The rest of the app depends only on this, so the
+ * ONNX engine can be swapped (for example for Bergamot) without touching anything else.
+ */
 interface Translator {
-    suspend fun translate(texts: List<String>): List<String>
+    suspend fun translate(sentence: String): String
 }
 
-/** Stage 1 placeholder: marks the text instead of translating it, so plaque placement can be checked. */
+/** Placeholder that marks text instead of translating it; used in tests. */
 class StubTranslator : Translator {
-    override suspend fun translate(texts: List<String>): List<String> = texts.map { "RU: [$it]" }
+    override suspend fun translate(sentence: String): String = "RU: [$sentence]"
 }

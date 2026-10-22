@@ -31,9 +31,12 @@ object Diagnostics {
         events.add("${AccessibilityEvent.eventTypeToString(type)} · ${packageName ?: "?"}")
     }
 
-    fun onRefresh(windows: Int, texts: Int, occluded: Int, millis: Long, packageName: String?) {
+    fun onRefresh(windows: Int, texts: Int, occluded: Int, cached: Int, queued: Int, millis: Long, packageName: String?) {
         refreshCount++
-        refreshes.add("окон $windows · текстов $texts · под окнами $occluded · $millis мс · ${packageName ?: "—"}")
+        refreshes.add(
+            "окон $windows · текстов $texts · под окнами $occluded · предложений из кэша $cached, в очередь $queued · " +
+                "$millis мс · ${packageName ?: "—"}",
+        )
     }
 
     fun onError(error: Throwable) {

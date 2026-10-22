@@ -9,13 +9,16 @@ import android.content.res.Configuration
 import android.os.SystemClock
 import android.view.accessibility.AccessibilityEvent
 import androidx.core.content.ContextCompat
+import com.screenlate.app.AppServices
 import com.screenlate.app.diagnostics.Diagnostics
 import com.screenlate.app.diagnostics.StatusNotifier
+import com.screenlate.app.model.ModelManager
 import com.screenlate.app.overlay.OverlayRenderer
 import com.screenlate.app.overlay.Plaque
+import com.screenlate.app.services
 import com.screenlate.app.settings.SettingsRepository
-import com.screenlate.app.translate.StubTranslator
-import com.screenlate.app.translate.Translator
+import com.screenlate.app.translate.TextSegments
+import com.screenlate.app.translate.TranslationQueue
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,17 +39,19 @@ class ScreenTranslateService : AccessibilityService() {
         SupervisorJob() + Dispatchers.Main.immediate + CoroutineExceptionHandler { _, error -> reportFailure(error) },
     )
     private val collectDispatcher = Dispatchers.Default.limitedParallelism(1)
-    private val translator: Translator = StubTranslator()
 
+    private lateinit var app: AppServices
     private lateinit var packages: PackagePolicy
     private lateinit var collector: ScreenTextCollector
     private lateinit var overlay: OverlayRenderer
     private lateinit var debouncer: EventDebouncer
+    private lateinit var queue: TranslationQueue
 
     private var connected = false
     private var enabled = false
     private var screenOn = true
     private var lastMotionAt = 0L
+    private var screenItems: List<TextItem> = emptyList()
     private var refreshJob: Job? = null
     private var showJob: Job? = null
 
@@ -67,6 +72,16 @@ class ScreenTranslateService : AccessibilityService() {
 
     override fun onServiceConnected() {
         super.onServiceConnected()
+        app = services
+        app.modelManager.refresh()
+        queue = TranslationQueue(
+            scope = scope,
+            translate = { sentence ->
+                app.repository.translate(sentence)
+                renderAvailable()
+            },
+            onFailure = ::reportFailure,
+        )
         packages = PackagePolicy.forDevice(this)
         collector = ScreenTextCollector(this, packages)
         overlay = OverlayRenderer(this)
@@ -84,6 +99,11 @@ class ScreenTranslateService : AccessibilityService() {
             SettingsRepository.get(this@ScreenTranslateService).enabled.collect { value ->
                 enabled = value
                 if (value) requestRefresh() else stopWork()
+            }
+        }
+        scope.launch {
+            app.modelManager.state.collect { state ->
+                if (state is ModelManager.State.Ready) requestRefresh()
             }
         }
     }
@@ -141,18 +161,38 @@ class ScreenTranslateService : AccessibilityService() {
     }
 
     private suspend fun refresh() {
+        if (app.modelManager.readyDir() == null) {
+            stopWork()
+            return
+        }
         val started = SystemClock.uptimeMillis()
         val screen = withContext(collectDispatcher) { collector.collect() }
-        val translations = translator.translate(screen.items.map { it.text })
-        overlay.render(screen.items.mapIndexed { i, item -> Plaque(item.key, translations[i], item.bounds) })
+        screenItems = screen.items
+        val sentences = screen.items.flatMap { TextSegments.sentences(it.text) }.distinct()
+        app.repository.preload(sentences)
+        val missing = sentences.filter { app.repository.cached(it) == null }
+        renderAvailable()
+        queue.replace(missing)
         Diagnostics.onRefresh(
             windows = screen.windowCount,
             texts = screen.items.size,
             occluded = screen.occluded,
+            cached = sentences.size - missing.size,
+            queued = missing.size,
             millis = SystemClock.uptimeMillis() - started,
             packageName = screen.items.firstOrNull()?.packageName,
         )
         scheduleShow()
+    }
+
+    /** Draws every item whose sentences are all translated; the rest appear as the queue gets to them. */
+    private fun renderAvailable() {
+        if (!connected) return
+        overlay.render(
+            screenItems.mapNotNull { item ->
+                app.repository.assembled(item.text)?.let { Plaque(item.key, it, item.bounds) }
+            },
+        )
     }
 
     private fun scheduleShow() {
@@ -169,6 +209,8 @@ class ScreenTranslateService : AccessibilityService() {
         debouncer.cancel()
         refreshJob?.cancel()
         showJob?.cancel()
+        screenItems = emptyList()
+        queue.replace(emptyList())
         overlay.clear()
     }
 

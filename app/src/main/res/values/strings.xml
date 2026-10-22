@@ -16,29 +16,50 @@
     <string name="translation_toggle">Перевод экрана</string>
     <string name="status_service_off">Служба специальных возможностей выключена. Включите её в шаге 2 ниже.</string>
     <string name="status_service_not_running">Служба включена, но не запущена. Выключите и снова включите ScreenLate в настройках специальных возможностей.</string>
-    <string name="status_on">Плашки появляются поверх английского текста. Пока вместо перевода в них заглушка «RU: [текст]».</string>
+    <string name="status_model_missing">Служба работает, но модель перевода ещё не скачана (шаг 1).</string>
+    <string name="status_on">Плашки с переводом появляются поверх английского текста.</string>
     <string name="status_paused">Перевод на паузе.</string>
+
+    <string name="test_title">Проверить перевод</string>
+    <string name="test_hint">Английский текст</string>
+    <string name="test_sample" translatable="false">Hello! Turn on notifications to get updates.</string>
+    <string name="test_time">за %1$d мс</string>
+    <string name="test_failed">Не получилось перевести: %1$s</string>
+    <string name="action_translate">Перевести</string>
 
     <string name="setup_title">Настройка</string>
     <string name="state_done">Готово</string>
     <string name="state_todo">Нужно сделать</string>
-    <string name="state_later">Позже</string>
+    <string name="state_in_progress">Идёт</string>
 
+    <string name="model_download_title">ScreenLate: модель перевода</string>
     <string name="step_model_title">Модель перевода</string>
-    <string name="step_model_body">Загрузка модели появится в следующей версии. Пока вместо перевода приложение показывает заглушку.</string>
+    <string name="step_model_body_missing">Модель переводит текст прямо на телефоне, без интернета. Её нужно один раз скачать: около %1$d МБ, лучше по Wi-Fi.</string>
+    <string name="step_model_body_downloading">Скачано %1$d из %2$d МБ. Загрузка продолжится, даже если закрыть приложение.</string>
+    <string name="step_model_body_installing">Проверка и распаковка модели.</string>
+    <string name="step_model_body_ready">Модель установлена (%1$d МБ). Перевод работает без интернета.</string>
+    <string name="step_model_failed_network">Не удалось скачать модель. Проверьте интернет и попробуйте ещё раз.</string>
+    <string name="step_model_failed_space">Не хватает места на телефоне. Для установки нужно около 250 МБ свободного места.</string>
+    <string name="step_model_failed_checksum">Файл модели повредился при загрузке. Скачайте его ещё раз.</string>
+    <string name="step_model_failed_storage">Не удалось распаковать модель. Попробуйте ещё раз.</string>
+    <string name="action_download_model">Скачать модель</string>
+    <string name="action_retry">Повторить</string>
+    <string name="action_redownload">Загрузить заново</string>
+    <string name="action_clear_cache">Очистить кэш</string>
+    <string name="cache_cleared">Кэш переводов очищен</string>
 
     <string name="step_service_title">Служба специальных возможностей</string>
     <string name="step_service_body">ScreenLate читает текст на экране через службу специальных возможностей. Откройте настройки, найдите ScreenLate (обычно в разделе «Скачанные приложения» или «Установленные службы») и включите.</string>
-    <string name="step_service_restricted">Если переключатель серый и написано, что настройка ограничена: откройте «О приложении», нажмите ⋮ в правом верхнем углу и выберите «Разрешить ограниченные настройки». Затем вернитесь и включите службу. Названия пунктов могут немного отличаться.</string>
+    <string name="step_service_restricted">Если переключатель серый и написано, что доступ ограничен: на обычном Android откройте «О приложении», нажмите ⋮ и выберите «Разрешить ограниченные настройки». На Realme такого пункта нет: удалите ScreenLate и установите его заново через приложение Obtainium (инструкция в README на GitHub), после этого служба включится.</string>
 
     <string name="step_notifications_title">Уведомления</string>
-    <string name="step_notifications_body">Уведомлением ScreenLate сообщит, если в работе службы случится ошибка. Других уведомлений не будет.</string>
+    <string name="step_notifications_body">Уведомлением ScreenLate сообщит, если в работе службы случится ошибка. Других уведомлений не будет, кроме хода загрузки модели.</string>
 
     <string name="step_battery_title">Оптимизация батареи</string>
     <string name="step_battery_body">Чтобы система не останавливала ScreenLate, разрешите ему работать без ограничений батареи. Перевод запускается только когда меняется экран.</string>
 
     <string name="step_vendor_title">Настройки Realme</string>
-    <string name="step_vendor_body">Realme UI может закрывать приложения в фоне. Откройте «О приложении» и в разделе батареи включите «Разрешить фоновую активность», а также автозапуск, если такой пункт есть. Ещё закрепите ScreenLate в недавних приложениях: откройте список недавних, нажмите ⋮ на карточке ScreenLate (или потяните её вниз) и выберите «Закрепить». Названия пунктов могут немного отличаться. Проверить эти настройки приложение не может, поэтому отметьте их сами.</string>
+    <string name="step_vendor_body">Realme UI может закрывать приложения в фоне. Откройте «О приложении» → «Использование батареи» и включите «Разрешить фоновую активность», а также автозапуск, если такой пункт есть. Ещё закрепите ScreenLate в недавних приложениях: откройте список недавних, нажмите ⋮ над карточкой ScreenLate и выберите «Закрепить» (или «Заблокировать»). Проверить эти настройки приложение не может, поэтому отметьте их сами.</string>
     <string name="step_vendor_done">Готово, всё сделано</string>
 
     <string name="action_open_accessibility">Открыть настройки</string>
@@ -51,7 +72,13 @@
     <string name="diagnostics_summary">Служба: %1$s\nСобытий: %2$d · обновлений экрана: %3$d\nПамять процесса: %4$d МБ</string>
     <string name="diagnostics_running">работает</string>
     <string name="diagnostics_stopped">не запущена</string>
+    <string name="diagnostics_cache">Кэш переводов: в памяти %1$d, на диске %2$d (%3$s МБ)</string>
     <string name="diagnostics_privacy">Здесь нет текста с экрана: только типы событий, приложения, количество и время.</string>
+    <string name="diagnostics_self_test">Проверка модели</string>
+    <string name="diagnostics_self_test_running">Проверка идёт, это займёт до минуты. Не уходите с этого экрана.</string>
+    <string name="diagnostics_self_test_report">Совпало с эталоном: %1$d из %2$d фраз (%3$d из %4$d предложений)\nЗагрузка модели: %5$d мс (цель до 3000)\nФраза: медиана %6$d мс, максимум %7$d мс (цель до 300)\nВсе фразы подряд: %8$d мс (цель до 2000)\nПоказ из кэша: %9$s мс на фразу (цель до 50)\nПамять процесса: %10$d МБ (цель до 300)</string>
+    <string name="diagnostics_self_test_mismatches">Не совпали: %1$s</string>
+    <string name="diagnostics_self_test_failed">Проверка не удалась: %1$s</string>
     <string name="diagnostics_errors">Ошибки</string>
     <string name="diagnostics_refreshes">Последние обновления экрана</string>
     <string name="diagnostics_events">Последние события</string>

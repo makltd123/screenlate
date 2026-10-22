@@ -1,0 +1,635 @@
+[
+ {
+  "text": "Settings",
+  "onnx": "Параметры",
+  "torch": "Параметры",
+  "word_difference": 0,
+  "millis": 9.3,
+  "sentences": [
+   {
+    "text": "Settings",
+    "input_ids": [
+     56772,
+     0
+    ],
+    "output_ids": [
+     48429
+    ],
+    "onnx": "Параметры"
+   }
+  ]
+ },
+ {
+  "text": "Sign in to your account",
+  "onnx": "Подпишитесь на ваш счет.",
+  "torch": "Подпишитесь на ваш счет.",
+  "word_difference": 0,
+  "millis": 26.3,
+  "sentences": [
+   {
+    "text": "Sign in to your account",
+    "input_ids": [
+     28198,
+     10,
+     9,
+     149,
+     817,
+     0
+    ],
+    "output_ids": [
+     2078,
+     30280,
+     1279,
+     17,
+     5645,
+     1276,
+     3
+    ],
+    "onnx": "Подпишитесь на ваш счет."
+   }
+  ]
+ },
+ {
+  "text": "Read the full article",
+  "onnx": "Читай полную статью",
+  "torch": "Читай полную статью",
+  "word_difference": 0,
+  "millis": 26.5,
+  "sentences": [
+   {
+    "text": "Read the full article",
+    "input_ids": [
+     14122,
+     4,
+     747,
+     433,
+     0
+    ],
+    "output_ids": [
+     31608,
+     48,
+     8765,
+     7180
+    ],
+    "onnx": "Читай полную статью"
+   }
+  ]
+ },
+ {
+  "text": "Your password has been changed successfully.",
+  "onnx": "Ваш пароль был успешно изменен.",
+  "torch": "Ваш пароль был успешно изменен.",
+  "word_difference": 0,
+  "millis": 48.3,
+  "sentences": [
+   {
+    "text": "Your password has been changed successfully.",
+    "input_ids": [
+     2038,
+     35842,
+     88,
+     96,
+     5351,
+     9896,
+     3,
+     0
+    ],
+    "output_ids": [
+     49,
+     7378,
+     1077,
+     2193,
+     208,
+     6803,
+     40328,
+     3
+    ],
+    "onnx": "Ваш пароль был успешно изменен."
+   }
+  ]
+ },
+ {
+  "text": "Turn on notifications to get updates.",
+  "onnx": "Включите уведомления, чтобы получить обновления.",
+  "torch": "Включите уведомления, чтобы получить обновления.",
+  "word_difference": 0,
+  "millis": 32.3,
+  "sentences": [
+   {
+    "text": "Turn on notifications to get updates.",
+    "input_ids": [
+     16262,
+     25,
+     24440,
+     9,
+     371,
+     19791,
+     3,
+     0
+    ],
+    "output_ids": [
+     49,
+     4032,
+     1060,
+     7779,
+     2,
+     107,
+     2123,
+     14030,
+     3
+    ],
+    "onnx": "Включите уведомления, чтобы получить обновления."
+   }
+  ]
+ },
+ {
+  "text": "The weather will be sunny tomorrow.",
+  "onnx": "Погода завтра будет солнечной.",
+  "torch": "Завтра погода будет солнечной.",
+  "word_difference": 2,
+  "millis": 53.0,
+  "sentences": [
+   {
+    "text": "The weather will be sunny tomorrow.",
+    "input_ids": [
+     32,
+     14194,
+     85,
+     36,
+     8300,
+     4325,
+     4903,
+     3,
+     0
+    ],
+    "output_ids": [
+     176,
+     172,
+     819,
+     4431,
+     142,
+     16,
+     2746,
+     774,
+     10207,
+     3
+    ],
+    "onnx": "Погода завтра будет солнечной."
+   }
+  ]
+ },
+ {
+  "text": "Add to cart",
+  "onnx": "Добавить в тележку",
+  "torch": "Добавить в тележку",
+  "word_difference": 0,
+  "millis": 35.0,
+  "sentences": [
+   {
+    "text": "Add to cart",
+    "input_ids": [
+     3119,
+     9,
+     33692,
+     0
+    ],
+    "output_ids": [
+     23114,
+     6,
+     6426,
+     962,
+     476
+    ],
+    "onnx": "Добавить в тележку"
+   }
+  ]
+ },
+ {
+  "text": "This video is not available in your country.",
+  "onnx": "В вашей стране это видео не доступно.",
+  "torch": "В вашей стране это видео не доступно.",
+  "word_difference": 0,
+  "millis": 50.6,
+  "sentences": [
+   {
+    "text": "This video is not available in your country.",
+    "input_ids": [
+     268,
+     8499,
+     34,
+     61,
+     815,
+     10,
+     149,
+     385,
+     3,
+     0
+    ],
+    "output_ids": [
+     49,
+     6846,
+     1366,
+     79,
+     7734,
+     26,
+     1714,
+     311,
+     3
+    ],
+    "onnx": "В вашей стране это видео не доступно."
+   }
+  ]
+ },
+ {
+  "text": "Check for updates",
+  "onnx": "Проверьте обновления",
+  "torch": "Проверка обновления",
+  "word_difference": 1,
+  "millis": 28.0,
+  "sentences": [
+   {
+    "text": "Check for updates",
+    "input_ids": [
+     16091,
+     20,
+     19791,
+     0
+    ],
+    "output_ids": [
+     1003,
+     571,
+     3677,
+     14030
+    ],
+    "onnx": "Проверьте обновления"
+   }
+  ]
+ },
+ {
+  "text": "I will call you back later.",
+  "onnx": "Я перезвоню позже.",
+  "torch": "Я перезвоню позже.",
+  "word_difference": 0,
+  "millis": 41.6,
+  "sentences": [
+   {
+    "text": "I will call you back later.",
+    "input_ids": [
+     29,
+     85,
+     1092,
+     33,
+     559,
+     2181,
+     3,
+     0
+    ],
+    "output_ids": [
+     76,
+     790,
+     670,
+     1198,
+     2666,
+     9434,
+     3
+    ],
+    "onnx": "Я перезвоню позже."
+   }
+  ]
+ },
+ {
+  "text": "Privacy policy",
+  "onnx": "Политика в области конфиденциальности",
+  "torch": "Политика в области конфиденциальности",
+  "word_difference": 0,
+  "millis": 31.4,
+  "sentences": [
+   {
+    "text": "Privacy policy",
+    "input_ids": [
+     57423,
+     623,
+     0
+    ],
+    "output_ids": [
+     19437,
+     6,
+     148,
+     7639,
+     1001
+    ],
+    "onnx": "Политика в области конфиденциальности"
+   }
+  ]
+ },
+ {
+  "text": "Download the latest version of the app.",
+  "onnx": "Загрузить последнюю версию приложения.",
+  "torch": "Загрузить последнюю версию приложения.",
+  "word_difference": 0,
+  "millis": 42.4,
+  "sentences": [
+   {
+    "text": "Download the latest version of the app.",
+    "input_ids": [
+     58857,
+     4,
+     7007,
+     5611,
+     5,
+     4,
+     23512,
+     3,
+     0
+    ],
+    "output_ids": [
+     679,
+     10701,
+     701,
+     21293,
+     34550,
+     3551,
+     3
+    ],
+    "onnx": "Загрузить последнюю версию приложения."
+   }
+  ]
+ },
+ {
+  "text": "Are you sure you want to delete this message?",
+  "onnx": "Вы уверены, что хотите удалить это сообщение?",
+  "torch": "Вы уверены, что хотите удалить это сообщение?",
+  "word_difference": 0,
+  "millis": 48.1,
+  "sentences": [
+   {
+    "text": "Are you sure you want to delete this message?",
+    "input_ids": [
+     1656,
+     33,
+     1642,
+     33,
+     441,
+     9,
+     15213,
+     66,
+     5418,
+     19,
+     0
+    ],
+    "output_ids": [
+     394,
+     11690,
+     2,
+     28,
+     4873,
+     35377,
+     79,
+     4341,
+     19
+    ],
+    "onnx": "Вы уверены, что хотите удалить это сообщение?"
+   }
+  ]
+ },
+ {
+  "text": "New messages",
+  "onnx": "Новые сообщения",
+  "torch": "Новые сообщения",
+  "word_difference": 0,
+  "millis": 18.3,
+  "sentences": [
+   {
+    "text": "New messages",
+    "input_ids": [
+     963,
+     12271,
+     0
+    ],
+    "output_ids": [
+     13621,
+     2388
+    ],
+    "onnx": "Новые сообщения"
+   }
+  ]
+ },
+ {
+  "text": "The meeting has been moved to Friday afternoon.",
+  "onnx": "Совещание перенесено на пятницу после обеда.",
+  "torch": "Заседание переносится на пятницу после обеда.",
+  "word_difference": 2,
+  "millis": 49.5,
+  "sentences": [
+   {
+    "text": "The meeting has been moved to Friday afternoon.",
+    "input_ids": [
+     32,
+     305,
+     88,
+     96,
+     7579,
+     9,
+     6744,
+     11859,
+     3,
+     0
+    ],
+    "output_ids": [
+     6285,
+     22574,
+     70,
+     17,
+     11810,
+     382,
+     12518,
+     41,
+     3
+    ],
+    "onnx": "Совещание перенесено на пятницу после обеда."
+   }
+  ]
+ },
+ {
+  "text": "Battery saver is on",
+  "onnx": "Спаситель аккумулятора включен",
+  "torch": "Спаситель батареи включен",
+  "word_difference": 1,
+  "millis": 40.2,
+  "sentences": [
+   {
+    "text": "Battery saver is on",
+    "input_ids": [
+     458,
+     25104,
+     200,
+     5316,
+     1114,
+     34,
+     25,
+     0
+    ],
+    "output_ids": [
+     111,
+     5414,
+     4197,
+     21,
+     32913,
+     41,
+     11443
+    ],
+    "onnx": "Спаситель аккумулятора включен"
+   }
+  ]
+ },
+ {
+  "text": "Share this post with your friends.",
+  "onnx": "Поделитесь этим постом с друзьями.",
+  "torch": "Поделитесь этим постом со своими друзьями.",
+  "word_difference": 2,
+  "millis": 48.9,
+  "sentences": [
+   {
+    "text": "Share this post with your friends.",
+    "input_ids": [
+     41508,
+     66,
+     1569,
+     37,
+     149,
+     3621,
+     3,
+     0
+    ],
+    "output_ids": [
+     176,
+     3824,
+     3835,
+     671,
+     4233,
+     115,
+     16,
+     15022,
+     3
+    ],
+    "onnx": "Поделитесь этим постом с друзьями."
+   }
+  ]
+ },
+ {
+  "text": "Something went wrong. Please try again.",
+  "onnx": "Что-то пошло не так. Попробуй еще раз.",
+  "torch": "Что-то пошло не так. Пожалуйста, попробуй еще раз.",
+  "word_difference": 2,
+  "millis": 71.9,
+  "sentences": [
+   {
+    "text": "Something went wrong.",
+    "input_ids": [
+     10952,
+     2500,
+     2376,
+     3,
+     0
+    ],
+    "output_ids": [
+     249,
+     11,
+     329,
+     15,
+     1492,
+     818,
+     26,
+     183,
+     3
+    ],
+    "onnx": "Что-то пошло не так."
+   },
+   {
+    "text": "Please try again.",
+    "input_ids": [
+     2037,
+     3001,
+     1147,
+     3,
+     0
+    ],
+    "output_ids": [
+     176,
+     5533,
+     60,
+     48,
+     401,
+     376,
+     3
+    ],
+    "onnx": "Попробуй еще раз."
+   }
+  ]
+ },
+ {
+  "text": "Scientists discovered a new species of frog in the rainforest.",
+  "onnx": "Ученые обнаружили новый вид лягушек в тропических лесах.",
+  "torch": "Ученые обнаружили новый вид лягушек в тропических лесах.",
+  "word_difference": 0,
+  "millis": 63.5,
+  "sentences": [
+   {
+    "text": "Scientists discovered a new species of frog in the rainforest.",
+    "input_ids": [
+     52241,
+     15166,
+     13,
+     297,
+     10211,
+     5,
+     27527,
+     140,
+     10,
+     4,
+     12163,
+     37889,
+     3,
+     0
+    ],
+    "output_ids": [
+     52772,
+     22615,
+     2974,
+     4047,
+     7182,
+     8020,
+     22552,
+     6,
+     28912,
+     10142,
+     16132,
+     44,
+     3
+    ],
+    "onnx": "Ученые обнаружили новый вид лягушек в тропических лесах."
+   }
+  ]
+ },
+ {
+  "text": "Cancel",
+  "onnx": "Отмена",
+  "torch": "Отмена",
+  "word_difference": 0,
+  "millis": 11.7,
+  "sentences": [
+   {
+    "text": "Cancel",
+    "input_ids": [
+     50020,
+     0
+    ],
+    "output_ids": [
+     1110,
+     12013
+    ],
+    "onnx": "Отмена"
+   }
+  ]
+ }
+]

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.ksp)
 }
 
 // CI decodes the release keystore here; without it the release build is signed with the debug key.
@@ -16,8 +17,8 @@ android {
         applicationId = "com.screenlate.app"
         minSdk = 26
         targetSdk = 34
-        versionCode = 2
-        versionName = "0.2.0"
+        versionCode = 3
+        versionName = "0.3.0"
 
         ndk {
             abiFilters += "arm64-v8a"
@@ -70,6 +71,13 @@ android {
         compose = true
         buildConfig = true
     }
+
+    // ONNX Runtime's library is 33 MB; compressing it keeps the APK under the spec's 30 MB.
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
 }
 
 // CI builds the tokenizer library for the host and unpacks the model so JVM tests can use both.
@@ -95,6 +103,9 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.onnxruntime.android)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)

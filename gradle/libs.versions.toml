@@ -1,6 +1,8 @@
 [versions]
 agp = "9.4.1"
 kotlin = "2.4.21"
+ksp = "2.3.12"
+room = "2.8.5"
 coroutines = "1.11.0"
 coreKtx = "1.19.1"
 activityCompose = "1.13.0"
@@ -22,7 +24,10 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
-onnxruntime-android = { module = "com.microsoft.onnxruntime:onnxruntime-android", version.ref = "onnxruntime" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+onnxruntime-android ={ module = "com.microsoft.onnxruntime:onnxruntime-android", version.ref = "onnxruntime" }
 onnxruntime-desktop = { module = "com.microsoft.onnxruntime:onnxruntime", version.ref = "onnxruntime" }
 junit = { module = "junit:junit", version.ref = "junit" }
 org-json = { module = "org.json:json", version.ref = "orgJson" }
@@ -30,3 +35,4 @@ org-json = { module = "org.json:json", version.ref = "orgJson" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

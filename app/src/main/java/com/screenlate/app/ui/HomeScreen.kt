@@ -2,6 +2,8 @@ package com.screenlate.app.ui
 
 import android.Manifest
 import android.os.Build
+import android.os.SystemClock
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -16,9 +18,11 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -40,6 +44,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.screenlate.app.AppVersion
 import com.screenlate.app.R
 import com.screenlate.app.accessibility.ServiceStatus
+import com.screenlate.app.model.ModelManager
+import com.screenlate.app.services
 import com.screenlate.app.settings.SettingsRepository
 import kotlinx.coroutines.launch
 
@@ -47,14 +53,17 @@ import kotlinx.coroutines.launch
 fun HomeScreen(onOpenDiagnostics: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val app = remember { context.services }
     val settings = remember { SettingsRepository.get(context) }
     val enabled by settings.enabled.collectAsStateWithLifecycle(initialValue = true)
     val vendorStepsDone by settings.vendorStepsDone.collectAsStateWithLifecycle(initialValue = false)
     val running by ServiceStatus.running.collectAsStateWithLifecycle()
+    val model by app.modelManager.state.collectAsStateWithLifecycle()
 
     var status by remember { mutableStateOf(SetupStatus.read(context)) }
     LifecycleResumeEffect(Unit) {
         status = SetupStatus.read(context)
+        app.modelManager.refresh()
         onPauseOrDispose { }
     }
 
@@ -63,6 +72,7 @@ fun HomeScreen(onOpenDiagnostics: () -> Unit) {
     val notificationPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
         status = SetupStatus.read(context)
     }
+    val modelReady = model is ModelManager.State.Ready
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -77,9 +87,11 @@ fun HomeScreen(onOpenDiagnostics: () -> Unit) {
 
             TranslationToggle(
                 enabled = enabled,
-                status = translationStatus(status.serviceEnabled, running, enabled),
+                status = translationStatus(status.serviceEnabled, running, modelReady, enabled),
                 onToggle = { value -> scope.launch { settings.setEnabled(value) } },
             )
+
+            if (modelReady) TestTranslation()
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 OutlinedButton(onClick = { SystemScreens.requestTile(context) }, modifier = Modifier.fillMaxWidth()) {
@@ -90,7 +102,16 @@ fun HomeScreen(onOpenDiagnostics: () -> Unit) {
             Text(text = stringResource(R.string.setup_title), style = MaterialTheme.typography.titleMedium)
             SetupSteps(
                 status = status,
+                model = model,
                 vendorStepsDone = vendorStepsDone,
+                onDownloadModel = { app.modelManager.download() },
+                onReinstallModel = { app.modelManager.reinstall() },
+                onClearCache = {
+                    scope.launch {
+                        app.repository.clear()
+                        Toast.makeText(context, R.string.cache_cleared, Toast.LENGTH_SHORT).show()
+                    }
+                },
                 onVendorStepsDone = { value -> scope.launch { settings.setVendorStepsDone(value) } },
                 onRequestNotifications = {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !notificationsAsked) {
@@ -116,6 +137,47 @@ fun HomeScreen(onOpenDiagnostics: () -> Unit) {
     }
 }
 
+/** A text field to try the model directly; shows the translation and how long it took. */
+@Composable
+private fun TestTranslation() {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val sample = stringResource(R.string.test_sample)
+    var input by rememberSaveable { mutableStateOf(sample) }
+    var result by rememberSaveable { mutableStateOf("") }
+    var busy by remember { mutableStateOf(false) }
+
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(text = stringResource(R.string.test_title), style = MaterialTheme.typography.titleMedium)
+            OutlinedTextField(
+                value = input,
+                onValueChange = { input = it },
+                label = { Text(stringResource(R.string.test_hint)) },
+                modifier = Modifier.fillMaxWidth(),
+            )
+            Button(
+                enabled = !busy && input.isNotBlank(),
+                onClick = {
+                    busy = true
+                    scope.launch {
+                        val started = SystemClock.elapsedRealtime()
+                        result = runCatching { context.services.repository.translateText(input) }
+                            .map { "$it\n" + context.getString(R.string.test_time, SystemClock.elapsedRealtime() - started) }
+                            .getOrElse { context.getString(R.string.test_failed, it.javaClass.simpleName) }
+                        busy = false
+                    }
+                },
+            ) {
+                Text(stringResource(R.string.action_translate))
+            }
+            if (result.isNotEmpty()) {
+                Text(text = result, style = MaterialTheme.typography.bodyLarge)
+            }
+        }
+    }
+}
+
 @Composable
 private fun TranslationToggle(enabled: Boolean, status: String, onToggle: (Boolean) -> Unit) {
     Card(modifier = Modifier.fillMaxWidth()) {
@@ -135,11 +197,13 @@ private fun TranslationToggle(enabled: Boolean, status: String, onToggle: (Boole
 }
 
 @Composable
-private fun translationStatus(serviceEnabled: Boolean, running: Boolean, enabled: Boolean): String = stringResource(
-    when {
-        !serviceEnabled -> R.string.status_service_off
-        !running -> R.string.status_service_not_running
-        enabled -> R.string.status_on
-        else -> R.string.status_paused
-    },
-)
+private fun translationStatus(serviceEnabled: Boolean, running: Boolean, modelReady: Boolean, enabled: Boolean): String =
+    stringResource(
+        when {
+            !serviceEnabled -> R.string.status_service_off
+            !running -> R.string.status_service_not_running
+            !modelReady -> R.string.status_model_missing
+            enabled -> R.string.status_on
+            else -> R.string.status_paused
+        },
+    )

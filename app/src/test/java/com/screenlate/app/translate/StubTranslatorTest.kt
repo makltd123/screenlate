@@ -6,10 +6,7 @@ import org.junit.Test
 
 class StubTranslatorTest {
     @Test
-    fun wrapsEachTextInOrder() = runTest {
-        assertEquals(
-            listOf("RU: [Hello]", "RU: [Sign in]"),
-            StubTranslator().translate(listOf("Hello", "Sign in")),
-        )
+    fun marksTheSentence() = runTest {
+        assertEquals("RU: [Sign in]", StubTranslator().translate("Sign in"))
     }
 }
