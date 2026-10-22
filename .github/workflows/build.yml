@@ -24,6 +24,21 @@ jobs:
         with:
           cache-provider: basic
 
+      - name: Fetch the model for tests
+        run: |
+          url=$(grep -oP '^screenlate.modelUrl=\K.*' gradle.properties)
+          sha=$(grep -oP '^screenlate.modelSha256=\K.*' gradle.properties)
+          curl -sSfL -o "$RUNNER_TEMP/model.zip" "$url"
+          echo "$sha  $RUNNER_TEMP/model.zip" | sha256sum -c -
+          unzip -q "$RUNNER_TEMP/model.zip" -d "$RUNNER_TEMP/model"
+          echo "SCREENLATE_MODEL_DIR=$RUNNER_TEMP/model" >> "$GITHUB_ENV"
+
+      - name: Build the tokenizer library for JVM tests
+        run: |
+          cmake -S app/src/main/cpp -B "$RUNNER_TEMP/host-native" -DCMAKE_BUILD_TYPE=Release
+          cmake --build "$RUNNER_TEMP/host-native" --target spm_jni -j 4
+          echo "SCREENLATE_HOST_NATIVE_DIR=$RUNNER_TEMP/host-native" >> "$GITHUB_ENV"
+
       - name: Unit tests
         run: ./gradlew testDebugUnitTest
 

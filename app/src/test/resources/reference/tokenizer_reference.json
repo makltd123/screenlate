@@ -1,0 +1,1110 @@
+[
+ {
+  "text": "Settings",
+  "ids": [
+   56772,
+   0
+  ],
+  "pieces": [
+   "▁Settings",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Sign in to your account",
+  "ids": [
+   28198,
+   10,
+   9,
+   149,
+   817,
+   0
+  ],
+  "pieces": [
+   "▁Sign",
+   "▁in",
+   "▁to",
+   "▁your",
+   "▁account",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Read the full article",
+  "ids": [
+   14122,
+   4,
+   747,
+   433,
+   0
+  ],
+  "pieces": [
+   "▁Read",
+   "▁the",
+   "▁full",
+   "▁article",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Your password has been changed successfully.",
+  "ids": [
+   2038,
+   35842,
+   88,
+   96,
+   5351,
+   9896,
+   3,
+   0
+  ],
+  "pieces": [
+   "▁Your",
+   "▁password",
+   "▁has",
+   "▁been",
+   "▁changed",
+   "▁successfully",
+   ".",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Turn on notifications to get updates.",
+  "ids": [
+   16262,
+   25,
+   24440,
+   9,
+   371,
+   19791,
+   3,
+   0
+  ],
+  "pieces": [
+   "▁Turn",
+   "▁on",
+   "▁notifications",
+   "▁to",
+   "▁get",
+   "▁updates",
+   ".",
+   "</s>"
+  ]
+ },
+ {
+  "text": "The weather will be sunny tomorrow.",
+  "ids": [
+   32,
+   14194,
+   85,
+   36,
+   8300,
+   4325,
+   4903,
+   3,
+   0
+  ],
+  "pieces": [
+   "▁The",
+   "▁weather",
+   "▁will",
+   "▁be",
+   "▁sun",
+   "ny",
+   "▁tomorrow",
+   ".",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Add to cart",
+  "ids": [
+   3119,
+   9,
+   33692,
+   0
+  ],
+  "pieces": [
+   "▁Add",
+   "▁to",
+   "▁cart",
+   "</s>"
+  ]
+ },
+ {
+  "text": "This video is not available in your country.",
+  "ids": [
+   268,
+   8499,
+   34,
+   61,
+   815,
+   10,
+   149,
+   385,
+   3,
+   0
+  ],
+  "pieces": [
+   "▁This",
+   "▁video",
+   "▁is",
+   "▁not",
+   "▁available",
+   "▁in",
+   "▁your",
+   "▁country",
+   ".",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Check for updates",
+  "ids": [
+   16091,
+   20,
+   19791,
+   0
+  ],
+  "pieces": [
+   "▁Check",
+   "▁for",
+   "▁updates",
+   "</s>"
+  ]
+ },
+ {
+  "text": "I will call you back later.",
+  "ids": [
+   29,
+   85,
+   1092,
+   33,
+   559,
+   2181,
+   3,
+   0
+  ],
+  "pieces": [
+   "▁I",
+   "▁will",
+   "▁call",
+   "▁you",
+   "▁back",
+   "▁later",
+   ".",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Privacy policy",
+  "ids": [
+   57423,
+   623,
+   0
+  ],
+  "pieces": [
+   "▁Privacy",
+   "▁policy",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Download the latest version of the app.",
+  "ids": [
+   58857,
+   4,
+   7007,
+   5611,
+   5,
+   4,
+   23512,
+   3,
+   0
+  ],
+  "pieces": [
+   "▁Download",
+   "▁the",
+   "▁latest",
+   "▁version",
+   "▁of",
+   "▁the",
+   "▁app",
+   ".",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Are you sure you want to delete this message?",
+  "ids": [
+   1656,
+   33,
+   1642,
+   33,
+   441,
+   9,
+   15213,
+   66,
+   5418,
+   19,
+   0
+  ],
+  "pieces": [
+   "▁Are",
+   "▁you",
+   "▁sure",
+   "▁you",
+   "▁want",
+   "▁to",
+   "▁delete",
+   "▁this",
+   "▁message",
+   "?",
+   "</s>"
+  ]
+ },
+ {
+  "text": "New messages",
+  "ids": [
+   963,
+   12271,
+   0
+  ],
+  "pieces": [
+   "▁New",
+   "▁messages",
+   "</s>"
+  ]
+ },
+ {
+  "text": "The meeting has been moved to Friday afternoon.",
+  "ids": [
+   32,
+   305,
+   88,
+   96,
+   7579,
+   9,
+   6744,
+   11859,
+   3,
+   0
+  ],
+  "pieces": [
+   "▁The",
+   "▁meeting",
+   "▁has",
+   "▁been",
+   "▁moved",
+   "▁to",
+   "▁Friday",
+   "▁afternoon",
+   ".",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Battery saver is on",
+  "ids": [
+   458,
+   25104,
+   200,
+   5316,
+   1114,
+   34,
+   25,
+   0
+  ],
+  "pieces": [
+   "▁B",
+   "atter",
+   "y",
+   "▁save",
+   "r",
+   "▁is",
+   "▁on",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Share this post with your friends.",
+  "ids": [
+   41508,
+   66,
+   1569,
+   37,
+   149,
+   3621,
+   3,
+   0
+  ],
+  "pieces": [
+   "▁Share",
+   "▁this",
+   "▁post",
+   "▁with",
+   "▁your",
+   "▁friends",
+   ".",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Something went wrong. Please try again.",
+  "ids": [
+   10952,
+   2500,
+   2376,
+   3,
+   2037,
+   3001,
+   1147,
+   3,
+   0
+  ],
+  "pieces": [
+   "▁Something",
+   "▁went",
+   "▁wrong",
+   ".",
+   "▁Please",
+   "▁try",
+   "▁again",
+   ".",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Scientists discovered a new species of frog in the rainforest.",
+  "ids": [
+   52241,
+   15166,
+   13,
+   297,
+   10211,
+   5,
+   27527,
+   140,
+   10,
+   4,
+   12163,
+   37889,
+   3,
+   0
+  ],
+  "pieces": [
+   "▁Scientists",
+   "▁discovered",
+   "▁a",
+   "▁new",
+   "▁species",
+   "▁of",
+   "▁fro",
+   "g",
+   "▁in",
+   "▁the",
+   "▁rain",
+   "forest",
+   ".",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Cancel",
+  "ids": [
+   50020,
+   0
+  ],
+  "pieces": [
+   "▁Cancel",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Hello, world!",
+  "ids": [
+   160,
+   5270,
+   2,
+   564,
+   56,
+   0
+  ],
+  "pieces": [
+   "▁He",
+   "llo",
+   ",",
+   "▁world",
+   "!",
+   "</s>"
+  ]
+ },
+ {
+  "text": "HELLO WORLD",
+  "ids": [
+   902,
+   21254,
+   1847,
+   41576,
+   0
+  ],
+  "pieces": [
+   "▁H",
+   "ELL",
+   "O",
+   "▁WORLD",
+   "</s>"
+  ]
+ },
+ {
+  "text": "  leading and trailing spaces  ",
+  "ids": [
+   4534,
+   8,
+   28988,
+   118,
+   24834,
+   0
+  ],
+  "pieces": [
+   "▁leading",
+   "▁and",
+   "▁trail",
+   "ing",
+   "▁spaces",
+   "</s>"
+  ]
+ },
+ {
+  "text": "multiple   spaces   inside",
+  "ids": [
+   8668,
+   24834,
+   4168,
+   0
+  ],
+  "pieces": [
+   "▁multiple",
+   "▁spaces",
+   "▁inside",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Line one\nLine two",
+  "ids": [
+   17326,
+   159,
+   17326,
+   344,
+   0
+  ],
+  "pieces": [
+   "▁Line",
+   "▁one",
+   "▁Line",
+   "▁two",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Tab\tseparated",
+  "ids": [
+   47676,
+   14414,
+   0
+  ],
+  "pieces": [
+   "▁Tab",
+   "▁separated",
+   "</s>"
+  ]
+ },
+ {
+  "text": "It's John's \"quoted\" text",
+  "ids": [
+   97,
+   18,
+   23,
+   5365,
+   18,
+   23,
+   71,
+   116,
+   245,
+   198,
+   1701,
+   0
+  ],
+  "pieces": [
+   "▁It",
+   "'",
+   "s",
+   "▁John",
+   "'",
+   "s",
+   "▁\"",
+   "quot",
+   "ed",
+   "\"",
+   "▁text",
+   "</s>"
+  ]
+ },
+ {
+  "text": "“Curly quotes” and ‘single’ ones",
+  "ids": [
+   21,
+   1,
+   265,
+   3095,
+   485,
+   53656,
+   1,
+   8,
+   5924,
+   55017,
+   1,
+   4531,
+   0
+  ],
+  "pieces": [
+   "▁",
+   "<unk>",
+   "C",
+   "ur",
+   "ly",
+   "▁quotes",
+   "<unk>",
+   "▁and",
+   "▁‘",
+   "single",
+   "<unk>",
+   "▁ones",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Price: $19.99 (20% off)",
+  "ids": [
+   26721,
+   38,
+   33054,
+   3,
+   5265,
+   3533,
+   1394,
+   997,
+   24,
+   0
+  ],
+  "pieces": [
+   "▁Price",
+   ":",
+   "▁$19",
+   ".",
+   "99",
+   "▁(20",
+   "%",
+   "▁off",
+   ")",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Version 2.0.1 released on 2024-05-01",
+  "ids": [
+   48795,
+   41972,
+   721,
+   5861,
+   25,
+   336,
+   6262,
+   11,
+   5238,
+   41434,
+   0
+  ],
+  "pieces": [
+   "▁Version",
+   "▁2.0",
+   ".1",
+   "▁released",
+   "▁on",
+   "▁20",
+   "24",
+   "-",
+   "05",
+   "-01",
+   "</s>"
+  ]
+ },
+ {
+  "text": "e-mail me at test@example.com",
+  "ids": [
+   1263,
+   11,
+   6088,
+   108,
+   59,
+   1819,
+   4749,
+   7880,
+   5714,
+   2064,
+   3,
+   9881,
+   0
+  ],
+  "pieces": [
+   "▁e",
+   "-",
+   "mail",
+   "▁me",
+   "▁at",
+   "▁test",
+   "@",
+   "ex",
+   "amp",
+   "le",
+   ".",
+   "com",
+   "</s>"
+  ]
+ },
+ {
+  "text": "https://example.com/path?query=1",
+  "ids": [
+   7889,
+   23,
+   5312,
+   7880,
+   5714,
+   2064,
+   3,
+   9881,
+   51,
+   26162,
+   19,
+   10560,
+   2995,
+   2004,
+   858,
+   0
+  ],
+  "pieces": [
+   "▁http",
+   "s",
+   "://",
+   "ex",
+   "amp",
+   "le",
+   ".",
+   "com",
+   "/",
+   "path",
+   "?",
+   "que",
+   "ry",
+   "=",
+   "1",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Café, naïve, résumé",
+  "ids": [
+   367,
+   17266,
+   5220,
+   2,
+   7133,
+   48777,
+   437,
+   2,
+   46907,
+   21375,
+   5220,
+   0
+  ],
+  "pieces": [
+   "▁C",
+   "af",
+   "é",
+   ",",
+   "▁n",
+   "aï",
+   "ve",
+   ",",
+   "▁ré",
+   "sum",
+   "é",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Emoji test 😀👍",
+  "ids": [
+   551,
+   7309,
+   14979,
+   1819,
+   21,
+   1,
+   0
+  ],
+  "pieces": [
+   "▁E",
+   "mo",
+   "ji",
+   "▁test",
+   "▁",
+   "<unk>",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Non-breaking space",
+  "ids": [
+   2841,
+   11,
+   42450,
+   1552,
+   0
+  ],
+  "pieces": [
+   "▁Non",
+   "-",
+   "breaking",
+   "▁space",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Full-width ＡＢＣ letters",
+  "ids": [
+   20271,
+   11,
+   9438,
+   136,
+   537,
+   54839,
+   7269,
+   0
+  ],
+  "pieces": [
+   "▁Full",
+   "-",
+   "wi",
+   "d",
+   "th",
+   "▁ABC",
+   "▁letters",
+   "</s>"
+  ]
+ },
+ {
+  "text": "ﬁ ligature",
+  "ids": [
+   21891,
+   21,
+   28308,
+   27501,
+   0
+  ],
+  "pieces": [
+   "▁fi",
+   "▁",
+   "lig",
+   "ature",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Ellipsis… and dash — here",
+  "ids": [
+   4911,
+   21328,
+   19117,
+   67,
+   8,
+   45627,
+   258,
+   342,
+   0
+  ],
+  "pieces": [
+   "▁El",
+   "lip",
+   "sis",
+   "...",
+   "▁and",
+   "▁dash",
+   "▁—",
+   "▁here",
+   "</s>"
+  ]
+ },
+ {
+  "text": "C++ and C# are languages",
+  "ids": [
+   367,
+   8907,
+   8907,
+   8,
+   367,
+   26875,
+   55,
+   4265,
+   0
+  ],
+  "pieces": [
+   "▁C",
+   "+",
+   "+",
+   "▁and",
+   "▁C",
+   "#",
+   "▁are",
+   "▁languages",
+   "</s>"
+  ]
+ },
+ {
+  "text": "#hashtag @mention",
+  "ids": [
+   4954,
+   471,
+   12354,
+   26258,
+   26088,
+   3234,
+   3815,
+   0
+  ],
+  "pieces": [
+   "▁#",
+   "h",
+   "ash",
+   "tag",
+   "▁@",
+   "ment",
+   "ion",
+   "</s>"
+  ]
+ },
+ {
+  "text": "iPhone 15 Pro Max",
+  "ids": [
+   1278,
+   1291,
+   471,
+   3853,
+   285,
+   8317,
+   16285,
+   0
+  ],
+  "pieces": [
+   "▁i",
+   "P",
+   "h",
+   "one",
+   "▁15",
+   "▁Pro",
+   "▁Max",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Mr. Smith went to Washington.",
+  "ids": [
+   366,
+   3,
+   28561,
+   2500,
+   9,
+   13973,
+   3,
+   0
+  ],
+  "pieces": [
+   "▁Mr",
+   ".",
+   "▁Smith",
+   "▁went",
+   "▁to",
+   "▁Washington",
+   ".",
+   "</s>"
+  ]
+ },
+ {
+  "text": "U.S.A. and U.K.",
+  "ids": [
+   1266,
+   3,
+   349,
+   3,
+   196,
+   3,
+   8,
+   1266,
+   3,
+   2689,
+   3,
+   0
+  ],
+  "pieces": [
+   "▁U",
+   ".",
+   "S",
+   ".",
+   "A",
+   ".",
+   "▁and",
+   "▁U",
+   ".",
+   "K",
+   ".",
+   "</s>"
+  ]
+ },
+ {
+  "text": "3 x 4 = 12",
+  "ids": [
+   165,
+   6960,
+   221,
+   2479,
+   333,
+   0
+  ],
+  "pieces": [
+   "▁3",
+   "▁x",
+   "▁4",
+   "▁=",
+   "▁12",
+   "</s>"
+  ]
+ },
+ {
+  "text": "<b>bold</b> tags",
+  "ids": [
+   28309,
+   253,
+   38509,
+   253,
+   6329,
+   52004,
+   51,
+   253,
+   38509,
+   36303,
+   23,
+   0
+  ],
+  "pieces": [
+   "▁<",
+   "b",
+   ">",
+   "b",
+   "old",
+   "<",
+   "/",
+   "b",
+   ">",
+   "▁tag",
+   "s",
+   "</s>"
+  ]
+ },
+ {
+  "text": "smart‑hyphen",
+  "ids": [
+   11648,
+   38077,
+   11244,
+   9623,
+   1896,
+   0
+  ],
+  "pieces": [
+   "▁smart",
+   "‐",
+   "hy",
+   "ph",
+   "en",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Zero​width",
+  "ids": [
+   40271,
+   25864,
+   0
+  ],
+  "pieces": [
+   "▁Zero",
+   "▁width",
+   "</s>"
+  ]
+ },
+ {
+  "text": "a",
+  "ids": [
+   13,
+   0
+  ],
+  "pieces": [
+   "▁a",
+   "</s>"
+  ]
+ },
+ {
+  "text": "OK",
+  "ids": [
+   6375,
+   0
+  ],
+  "pieces": [
+   "▁OK",
+   "</s>"
+  ]
+ },
+ {
+  "text": "Supercalifragilisticexpialidocious",
+  "ids": [
+   25908,
+   15303,
+   8241,
+   21796,
+   2537,
+   15211,
+   29392,
+   5967,
+   40592,
+   295,
+   8655,
+   0
+  ],
+  "pieces": [
+   "▁Super",
+   "cal",
+   "if",
+   "rag",
+   "il",
+   "istic",
+   "exp",
+   "ial",
+   "ido",
+   "c",
+   "ious",
+   "</s>"
+  ]
+ }
+]

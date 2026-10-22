@@ -6,6 +6,8 @@ plugins {
 // CI decodes the release keystore here; without it the release build is signed with the debug key.
 val releaseKeystore = System.getenv("SCREENLATE_KEYSTORE")?.let(::File)?.takeIf { it.isFile }
 
+fun modelProperty(name: String) = providers.gradleProperty("screenlate.$name").get()
+
 android {
     namespace = "com.screenlate.app"
     compileSdk = 37
@@ -19,6 +21,23 @@ android {
 
         ndk {
             abiFilters += "arm64-v8a"
+        }
+        externalNativeBuild {
+            cmake {
+                targets += "spm_jni"
+                arguments += "-DANDROID_STL=c++_static"
+            }
+        }
+
+        buildConfigField("String", "MODEL_VERSION", "\"${modelProperty("modelVersion")}\"")
+        buildConfigField("String", "MODEL_URL", "\"${modelProperty("modelUrl")}\"")
+        buildConfigField("String", "MODEL_SHA256", "\"${modelProperty("modelSha256")}\"")
+        buildConfigField("long", "MODEL_BYTES", "${modelProperty("modelBytes")}L")
+    }
+
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
         }
     }
 
@@ -53,6 +72,12 @@ android {
     }
 }
 
+// CI builds the tokenizer library for the host and unpacks the model so JVM tests can use both.
+tasks.withType<Test>().configureEach {
+    System.getenv("SCREENLATE_HOST_NATIVE_DIR")?.let { systemProperty("java.library.path", it) }
+    System.getenv("SCREENLATE_MODEL_DIR")?.let { systemProperty("screenlate.modelDir", it) }
+}
+
 dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.core.ktx)
@@ -66,4 +91,6 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
+    // android.jar only has stubs of org.json; tests need the real thing.
+    testImplementation(libs.org.json)
 }
