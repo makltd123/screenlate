@@ -63,8 +63,9 @@ class OnnxGreedyTranslator:
         mask = np.ones_like(ids)
         hidden = self.encoder.run(None, {"input_ids": ids, "attention_mask": mask})[0]
 
-        # First step takes the no-cache branch; the empty past tensors only satisfy the graph inputs.
-        past = {name: np.zeros((1, self.heads, 0, self.head_dim), dtype=np.float32) for name in self.past_names}
+        # First step takes the no-cache branch. The past inputs are ignored there but must exist;
+        # a length of 1 (as optimum uses) keeps the shared symbolic dims consistent, a length of 0 does not.
+        past = {name: np.zeros((1, self.heads, 1, self.head_dim), dtype=np.float32) for name in self.past_names}
         token = PAD_ID
         use_cache = False
         result = []
@@ -113,7 +114,12 @@ def torch_translate(model, tokenizer, text: str) -> str:
             do_sample=False,
             max_new_tokens=max_new_tokens(encoded.input_ids.shape[1]),
         )
-    return tokenizer.decode(output[0], skip_special_tokens=True)
+    return decode(tokenizer, output[0])
+
+
+def decode(tokenizer, ids) -> str:
+    """Detokenize exactly as the app does: drop special tokens, no extra space cleanup."""
+    return tokenizer.decode(ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)
 
 
 def word_difference(a: str, b: str) -> int:
@@ -140,7 +146,7 @@ def translation_reference(model_dir: Path, tokenizer, torch_model) -> list[dict]
         started = time.perf_counter()
         output_ids = translator.translate_ids(input_ids)
         millis = (time.perf_counter() - started) * 1000
-        onnx_text = tokenizer.decode(output_ids, skip_special_tokens=True)
+        onnx_text = decode(tokenizer, output_ids)
         torch_text = torch_translate(torch_model, tokenizer, text)
         rows.append(
             {

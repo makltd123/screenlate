@@ -23,6 +23,7 @@ from reference_translate import (
     PAD_ID,
     REVISION,
     OnnxGreedyTranslator,
+    decode,
     load_phrases,
     load_tokenizer,
     load_torch_model,
@@ -67,7 +68,7 @@ def check_fp32(fp32_dir: Path, tokenizer, torch_model) -> list[str]:
     mismatches = []
     for text in load_phrases()["translate"]:
         ids = translator.translate_ids(tokenizer(text).input_ids)
-        onnx_text = tokenizer.decode(ids, skip_special_tokens=True)
+        onnx_text = decode(tokenizer, ids)
         torch_text = torch_translate(torch_model, tokenizer, text)
         if onnx_text != torch_text:
             mismatches.append(f"{text!r}: onnx {onnx_text!r} vs torch {torch_text!r}")
