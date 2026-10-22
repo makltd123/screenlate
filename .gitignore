@@ -1,0 +1,13 @@
+.gradle/
+.kotlin/
+build/
+captures/
+local.properties
+.idea/
+*.iml
+.DS_Store
+
+# Signing keys never go into the repository.
+*.keystore
+*.jks
+*.p12

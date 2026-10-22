@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">ScreenLate</string>
+    <string name="hello_title">ScreenLate работает</string>
+    <string name="hello_subtitle">Это каркас приложения. Перевод экрана появится в следующих версиях.</string>
+</resources>
