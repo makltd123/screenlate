@@ -84,7 +84,7 @@ Java_com_screenlate_app_translate_SentencePieceJni_nativeDecode(JNIEnv* env, jcl
         env->DeleteLocalRef(piece);
     }
     std::string text;
-    const auto status = processor(handle)->Decode(values, &text);
+    const auto status = processor(handle)->Decode(absl::MakeConstSpan(values), &text);
     if (!status.ok()) {
         throwIllegalState(env, status.ToString());
         return nullptr;

@@ -74,8 +74,19 @@ android {
 
 // CI builds the tokenizer library for the host and unpacks the model so JVM tests can use both.
 tasks.withType<Test>().configureEach {
+    testLogging {
+        events("passed", "skipped", "failed")
+        showStandardStreams = true
+    }
     System.getenv("SCREENLATE_HOST_NATIVE_DIR")?.let { systemProperty("java.library.path", it) }
     System.getenv("SCREENLATE_MODEL_DIR")?.let { systemProperty("screenlate.modelDir", it) }
+}
+
+// JVM tests run the translator on desktop ONNX Runtime; the Android build has no host natives.
+configurations.configureEach {
+    if (name.endsWith("UnitTestRuntimeClasspath")) {
+        exclude(group = "com.microsoft.onnxruntime", module = "onnxruntime-android")
+    }
 }
 
 dependencies {
@@ -83,6 +94,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.onnxruntime.android)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
@@ -93,4 +105,5 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     // android.jar only has stubs of org.json; tests need the real thing.
     testImplementation(libs.org.json)
+    testImplementation(libs.onnxruntime.desktop)
 }
