@@ -44,7 +44,7 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleRelease --warning-mode all
 
       - name: Name and check the APK
         id: apk
@@ -52,8 +52,9 @@ jobs:
           version=$(grep -oP 'versionName = "\K[^"]+' app/build.gradle.kts)
           name="ScreenLate-$version.apk"
           cp app/build/outputs/apk/release/app-release.apk "$name"
-          apksigner=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)/apksigner
-          "$apksigner" verify --print-certs "$name" | grep -E 'Signer #1 certificate (DN|SHA-256)'
+          build_tools=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          echo "apksigner from $build_tools"
+          "$build_tools/apksigner" verify --verbose --print-certs "$name"
           echo "Size: $(du -h "$name" | cut -f1)"
           echo "path=$name" >> "$GITHUB_OUTPUT"
 
