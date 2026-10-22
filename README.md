@@ -6,7 +6,13 @@ ScreenLate is an Android app that translates English text on the screen of any a
 
 ## Status
 
-**Stage 0: skeleton and CI.** The app currently shows a single "hello" screen. Screen reading, the overlay and translation come in the next stages. The full specification is in [docs/SPEC.md](docs/SPEC.md) (in Russian).
+**Stage 1: service and overlay with a placeholder.** The app finds English text in any app and draws plaques over it, but instead of a translation each plaque shows a placeholder `RU: [original text]`. This stage checks that plaques line up with the text; real translation arrives in stage 2. The full specification is in [docs/SPEC.md](docs/SPEC.md) (in Russian).
+
+- An accessibility service reads on-screen text. Passwords, input fields, the keyboard and the system UI are skipped.
+- A single touch-transparent overlay draws the plaques and hides them while the screen scrolls.
+- A Quick Settings tile switches translation on and off.
+- A setup checklist on the main screen walks through the required permissions.
+- A hidden diagnostics screen (long press on the version number) shows service events and timings, never screen text.
 
 Target device: Realme 10 (4 GB RAM), Android 13/14. Minimum Android version: 8.0.
 

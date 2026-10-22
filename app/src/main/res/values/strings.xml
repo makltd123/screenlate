@@ -1,6 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">ScreenLate</string>
-    <string name="hello_title">ScreenLate работает</string>
-    <string name="hello_subtitle">Это каркас приложения. Перевод экрана появится в следующих версиях.</string>
+
+    <string name="service_label">ScreenLate: перевод экрана</string>
+    <string name="service_description">ScreenLate читает английский текст на экране и показывает поверх него перевод на русский. Текст обрабатывается только на телефоне и никуда не отправляется. Пароли и поля ввода не читаются.</string>
+
+    <string name="tile_label">ScreenLate</string>
+    <string name="tile_subtitle_on">Перевод включён</string>
+    <string name="tile_subtitle_off">Перевод выключен</string>
+    <string name="tile_subtitle_service_off">Служба выключена</string>
+    <string name="tile_added">Плитка добавлена в шторку</string>
+    <string name="tile_already_added">Плитка уже есть в шторке</string>
+    <string name="add_tile">Добавить плитку в шторку</string>
+
+    <string name="translation_toggle">Перевод экрана</string>
+    <string name="status_service_off">Служба специальных возможностей выключена. Включите её в шаге 2 ниже.</string>
+    <string name="status_service_not_running">Служба включена, но не запущена. Выключите и снова включите ScreenLate в настройках специальных возможностей.</string>
+    <string name="status_on">Плашки появляются поверх английского текста. Пока вместо перевода в них заглушка «RU: [текст]».</string>
+    <string name="status_paused">Перевод на паузе.</string>
+
+    <string name="setup_title">Настройка</string>
+    <string name="state_done">Готово</string>
+    <string name="state_todo">Нужно сделать</string>
+    <string name="state_later">Позже</string>
+
+    <string name="step_model_title">Модель перевода</string>
+    <string name="step_model_body">Загрузка модели появится в следующей версии. Пока вместо перевода приложение показывает заглушку.</string>
+
+    <string name="step_service_title">Служба специальных возможностей</string>
+    <string name="step_service_body">ScreenLate читает текст на экране через службу специальных возможностей. Откройте настройки, найдите ScreenLate (обычно в разделе «Скачанные приложения» или «Установленные службы») и включите.</string>
+    <string name="step_service_restricted">Если переключатель серый и написано, что настройка ограничена: откройте «О приложении», нажмите ⋮ в правом верхнем углу и выберите «Разрешить ограниченные настройки». Затем вернитесь и включите службу. Названия пунктов могут немного отличаться.</string>
+
+    <string name="step_notifications_title">Уведомления</string>
+    <string name="step_notifications_body">Уведомлением ScreenLate сообщит, если в работе службы случится ошибка. Других уведомлений не будет.</string>
+
+    <string name="step_battery_title">Оптимизация батареи</string>
+    <string name="step_battery_body">Чтобы система не останавливала ScreenLate, разрешите ему работать без ограничений батареи. Перевод запускается только когда меняется экран.</string>
+
+    <string name="step_vendor_title">Настройки Realme</string>
+    <string name="step_vendor_body">Realme UI может закрывать приложения в фоне. Откройте «О приложении» и в разделе батареи включите «Разрешить фоновую активность», а также автозапуск, если такой пункт есть. Ещё закрепите ScreenLate в недавних приложениях: откройте список недавних, нажмите ⋮ на карточке ScreenLate (или потяните её вниз) и выберите «Закрепить». Названия пунктов могут немного отличаться. Проверить эти настройки приложение не может, поэтому отметьте их сами.</string>
+    <string name="step_vendor_done">Готово, всё сделано</string>
+
+    <string name="action_open_accessibility">Открыть настройки</string>
+    <string name="action_open_app_info">Открыть «О приложении»</string>
+    <string name="action_allow_notifications">Разрешить уведомления</string>
+    <string name="action_battery">Снять ограничение</string>
+    <string name="action_back">Назад</string>
+
+    <string name="diagnostics_title">Диагностика</string>
+    <string name="diagnostics_summary">Служба: %1$s\nСобытий: %2$d · обновлений экрана: %3$d\nПамять процесса: %4$d МБ</string>
+    <string name="diagnostics_running">работает</string>
+    <string name="diagnostics_stopped">не запущена</string>
+    <string name="diagnostics_privacy">Здесь нет текста с экрана: только типы событий, приложения, количество и время.</string>
+    <string name="diagnostics_errors">Ошибки</string>
+    <string name="diagnostics_refreshes">Последние обновления экрана</string>
+    <string name="diagnostics_events">Последние события</string>
+    <string name="diagnostics_empty">Пока пусто</string>
+
+    <string name="notification_channel_status">Состояние службы</string>
+    <string name="notification_error_title">ScreenLate: ошибка</string>
+    <string name="notification_error_text">Служба продолжает работать. Подробности на экране «Диагностика».</string>
 </resources>
