@@ -21,8 +21,11 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(sentencepiece)
 
+set(SPM_ROOT ${sentencepiece_SOURCE_DIR}/sentencepiece)
+
 add_library(spm_jni SHARED spm_jni.cpp)
-target_include_directories(spm_jni PRIVATE ${sentencepiece_SOURCE_DIR}/sentencepiece/src)
+# The public header includes "third_party/absl/..." relative to the SentencePiece root.
+target_include_directories(spm_jni PRIVATE ${SPM_ROOT}/src ${SPM_ROOT} ${SPM_ROOT}/third_party/abseil-cpp)
 target_link_libraries(spm_jni PRIVATE sentencepiece-static)
 
 if(ANDROID)
