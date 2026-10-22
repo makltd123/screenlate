@@ -26,5 +26,12 @@
 
 ## Заметки по сборке
 
+- Модель: `convert-model.yml` → релиз `model-v1` (помечен не последним). URL, SHA-256 и размер в `gradle.properties`, оттуда в BuildConfig и в CI. Эталоны: `app/src/test/resources/reference/` и `app/src/main/assets/selftest.json` (копия `translation_reference.json`).
+- Квантование: QInt8 per-tensor, без `accelerate` (с ним выходной слой остаётся fp32 и декодирование в 3 раза медленнее). QUInt8, per-channel и reduce_range проверены: хуже по качеству и скорости.
+- Объединённый декодер: кэш энкодера берётся только с первого шага, в ветке с кэшем он возвращает заглушки. Фиктивный past на первом шаге длины 1, не 0.
+- int8 на x86 без VNNI считается с насыщением и даёт другие токены в ~30% предложений. Эталон сделан на точном железе; ARM телефона тоже точный. JVM-тест точного совпадения пропускается на CI-машинах без VNNI.
+- SentencePiece 0.2.2 собирается из релизного архива (подпапка `sentencepiece/`), abseil он качает сам по git. CI собирает `libspm_jni.so` и под Linux для JVM-тестов.
+- `libonnxruntime.so` 33 МБ, поэтому `useLegacyPackaging = true` (сжатие в APK).
+
 - AGP 9: Kotlin встроен, плагин `org.jetbrains.kotlin.android` не подключается. Версия Kotlin поднимается строкой `classpath` в корневом `build.gradle.kts`.
 - AGP 9 убрал старый variant API (`applicationVariants`). APK переименовывается в workflow.

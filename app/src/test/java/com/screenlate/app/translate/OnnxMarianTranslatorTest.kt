@@ -2,7 +2,9 @@ package com.screenlate.app.translate
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
+import org.junit.Assume.assumeTrue
 import org.junit.Test
+import java.io.File
 
 /**
  * Runs the Kotlin decoding loop on desktop ONNX Runtime and compares token ids with the Python
@@ -12,6 +14,7 @@ import org.junit.Test
 class OnnxMarianTranslatorTest {
     @Test
     fun reproducesPythonReference() = runBlocking {
+        assumeTrue("this CPU has no VNNI, so its int8 kernels saturate and differ from the reference", exactInt8())
         val reference = ModelTestFiles.reference("translation_reference.json")
         val mismatches = ArrayList<String>()
         OnnxMarianTranslator.open(ModelTestFiles.modelDir(), threads = 2).use { translator ->
@@ -38,6 +41,16 @@ class OnnxMarianTranslatorTest {
         }
         mismatches.forEach(::println)
         assertTrue("mismatches:\n" + mismatches.joinToString("\n"), mismatches.isEmpty())
+    }
+
+    /**
+     * The reference was made on a CPU that computes int8 products exactly, as ARM phones do.
+     * x86 CPUs without VNNI use a saturating instruction and pick different words in a few sentences.
+     */
+    private fun exactInt8(): Boolean {
+        if (System.getProperty("os.arch") == "aarch64") return true
+        val cpu = File("/proc/cpuinfo").takeIf { it.isFile }?.readText() ?: return false
+        return "avx512_vnni" in cpu || "avx_vnni" in cpu
     }
 
     private companion object {

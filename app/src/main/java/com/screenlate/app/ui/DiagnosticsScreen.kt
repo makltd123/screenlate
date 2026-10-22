@@ -138,6 +138,7 @@ fun DiagnosticsScreen(onBack: () -> Unit) {
 private fun describe(context: Context, report: ModelSelfTest.Report): String {
     val summary = context.getString(
         R.string.diagnostics_self_test_report,
+        report.phrasesClose,
         report.phrasesMatched,
         report.phrases,
         report.sentencesMatched,

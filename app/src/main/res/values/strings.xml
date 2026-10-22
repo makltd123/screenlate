@@ -76,8 +76,8 @@
     <string name="diagnostics_privacy">Здесь нет текста с экрана: только типы событий, приложения, количество и время.</string>
     <string name="diagnostics_self_test">Проверка модели</string>
     <string name="diagnostics_self_test_running">Проверка идёт, это займёт до минуты. Не уходите с этого экрана.</string>
-    <string name="diagnostics_self_test_report">Совпало с эталоном: %1$d из %2$d фраз (%3$d из %4$d предложений)\nЗагрузка модели: %5$d мс (цель до 3000)\nФраза: медиана %6$d мс, максимум %7$d мс (цель до 300)\nВсе фразы подряд: %8$d мс (цель до 2000)\nПоказ из кэша: %9$s мс на фразу (цель до 50)\nПамять процесса: %10$d МБ (цель до 300)</string>
-    <string name="diagnostics_self_test_mismatches">Не совпали: %1$s</string>
+    <string name="diagnostics_self_test_report">Качество (не больше 2 слов отличия от оригинальной модели): %1$d из %3$d фраз\nТочно как эталон: %2$d из %3$d фраз (%4$d из %5$d предложений)\nЗагрузка модели: %6$d мс (цель до 3000)\nФраза: медиана %7$d мс, максимум %8$d мс (цель до 300)\nВсе фразы подряд: %9$d мс (цель до 2000)\nПоказ из кэша: %10$s мс на фразу (цель до 50)\nПамять процесса: %11$d МБ (цель до 300)</string>
+    <string name="diagnostics_self_test_mismatches">Не точно как эталон: %1$s</string>
     <string name="diagnostics_self_test_failed">Проверка не удалась: %1$s</string>
     <string name="diagnostics_errors">Ошибки</string>
     <string name="diagnostics_refreshes">Последние обновления экрана</string>

@@ -16,6 +16,7 @@ class ModelSelfTest(private val context: Context, private val app: AppServices) 
 
     class Report(
         val phrasesMatched: Int,
+        val phrasesClose: Int,
         val phrases: Int,
         val sentencesMatched: Int,
         val sentences: Int,
@@ -40,6 +41,7 @@ class ModelSelfTest(private val context: Context, private val app: AppServices) 
         var sentences = 0
         var sentencesMatched = 0
         var phrasesMatched = 0
+        var phrasesClose = 0
         app.engine.use { translator ->
             for (phrase in phrases) {
                 val parts = phrase.getJSONArray("sentences")
@@ -59,6 +61,8 @@ class ModelSelfTest(private val context: Context, private val app: AppServices) 
                 // Also checks that the app splits sentences exactly like the reference script.
                 val assembled = TextSegments.assemble(phrase.getString("text")) { translations[it] }
                 if (allMatch && assembled == phrase.getString("onnx")) phrasesMatched++ else mismatches += phrase.getString("text")
+                // The spec's bar: int8 may differ from the original PyTorch model by at most 2 words.
+                if (assembled != null && wordDifference(assembled, phrase.getString("torch")) <= MAX_WORD_DIFFERENCE) phrasesClose++
             }
         }
         val loadMillis = app.engine.lastLoadMillis
@@ -73,6 +77,7 @@ class ModelSelfTest(private val context: Context, private val app: AppServices) 
         val sorted = phraseMillis.sorted()
         return Report(
             phrasesMatched = phrasesMatched,
+            phrasesClose = phrasesClose,
             phrases = phrases.size,
             sentencesMatched = sentencesMatched,
             sentences = sentences,
@@ -89,5 +94,19 @@ class ModelSelfTest(private val context: Context, private val app: AppServices) 
     private companion object {
         const val REFERENCE = "selftest.json"
         const val CACHE_ROUNDS = 10
+        const val MAX_WORD_DIFFERENCE = 2
     }
+}
+
+/** Words added, removed or replaced between two texts: the longer length minus their common subsequence. */
+internal fun wordDifference(a: String, b: String): Int {
+    val left = a.split(' ').filter { it.isNotEmpty() }
+    val right = b.split(' ').filter { it.isNotEmpty() }
+    val common = Array(left.size + 1) { IntArray(right.size + 1) }
+    for (i in left.indices.reversed()) {
+        for (j in right.indices.reversed()) {
+            common[i][j] = if (left[i] == right[j]) common[i + 1][j + 1] + 1 else maxOf(common[i + 1][j], common[i][j + 1])
+        }
+    }
+    return maxOf(left.size, right.size) - common[0][0]
 }
