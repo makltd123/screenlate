@@ -1,0 +1,53 @@
+name: Convert model
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Upload the zip to the model-v1 release
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Install tools
+        run: |
+          pip install torch==2.9.1 --index-url https://download.pytorch.org/whl/cpu
+          pip install -r scripts/requirements.txt
+
+      - name: Convert and check
+        run: python scripts/convert_model.py --work build/model --out dist
+
+      - name: Report
+        if: always()
+        run: cat dist/report.md >> "$GITHUB_STEP_SUMMARY" || true
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: model-v1
+          path: dist/
+          if-no-files-found: ignore
+
+      - name: Publish to release model-v1
+        if: inputs.publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh release view model-v1 > /dev/null 2>&1; then
+            gh release create model-v1 --title "Model: Opus-MT en→ru int8 v1" --notes-file dist/release-notes.md --latest=false
+          fi
+          gh release upload model-v1 dist/opus-mt-en-ru-int8-v1.zip dist/opus-mt-en-ru-int8-v1.zip.sha256 --clobber

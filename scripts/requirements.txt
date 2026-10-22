@@ -1,0 +1,8 @@
+# Model conversion only; install torch first from the CPU index (see convert-model.yml).
+# optimum-onnx 0.1.0 (pulled in by the optimum extra) needs optimum 2.1.x and transformers < 4.58.
+optimum[onnxruntime]==2.1.0
+optimum-onnx==0.1.0
+transformers==4.57.6
+onnx==1.23.2
+onnxruntime==1.31.0
+sentencepiece==0.2.2
