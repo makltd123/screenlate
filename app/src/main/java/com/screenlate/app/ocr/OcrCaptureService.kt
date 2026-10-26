@@ -111,6 +111,7 @@ class OcrCaptureService : Service() {
             // Android 14 requires the foreground service of this type to run before this call.
             val created: MediaProjection =
                 getSystemService(MediaProjectionManager::class.java).getMediaProjection(resultCode, data)
+                    ?: throw IllegalStateException("media projection was rejected")
             projection = created
             created.registerCallback(
                 object : MediaProjection.Callback() {
