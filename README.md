@@ -53,3 +53,7 @@ Stage 4 adds screenshot translation. `com.google.mlkit:text-recognition` 16.0.1 
 ### Signing key
 
 The release APK is signed with a key stored in the repository secrets: `KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`. Without them the workflow signs with a throwaway debug key, and such an APK cannot be installed over a previous version. Step-by-step instructions for creating the key are in [README.ru.md](README.ru.md#ключ-подписи).
+
+---
+
+Author: [Fedor Makovskiy](https://fedor.alqira.ru), AI developer. Services and projects with quality metrics: [fedor.alqira.ru](https://fedor.alqira.ru).
