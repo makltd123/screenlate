@@ -32,7 +32,7 @@ import com.screenlate.app.accessibility.ScreenRect
 import com.screenlate.app.accessibility.TextFilter
 import com.screenlate.app.diagnostics.Diagnostics
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.Channel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -109,8 +109,10 @@ class OcrCaptureService : Service() {
         }
         try {
             // Android 14 requires the foreground service of this type to run before this call.
-            projection = getSystemService(MediaProjectionManager::class.java).getMediaProjection(resultCode, data)
-            projection.registerCallback(
+            val created: MediaProjection =
+                getSystemService(MediaProjectionManager::class.java).getMediaProjection(resultCode, data)
+            projection = created
+            created.registerCallback(
                 object : MediaProjection.Callback() {
                     override fun onStop() {
                         settle(OcrEvent.Failed("projection stopped"))
@@ -140,8 +142,16 @@ class OcrCaptureService : Service() {
                 }
             }, Handler(thread.looper))
 
-            @Suppress("DEPRECATION")
-            display = projection.createVirtualDisplay("screenlate-ocr", width, height, dpi, reader.surface, 0)
+            display = created.createVirtualDisplay(
+                "screenlate-ocr",
+                width,
+                height,
+                dpi,
+                0, // flags: the display mirrors the whole screen, no rotation handling needed
+                reader.surface,
+                null,
+                null,
+            )
 
             // Wait for the first frame, then for a gap with no new frames: the screen stopped changing.
             withTimeoutOrNull(FIRST_FRAME_MS) { frames.receive() } ?: error("no frame")
