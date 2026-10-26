@@ -8,12 +8,16 @@ import android.content.IntentFilter
 import android.content.res.Configuration
 import android.os.SystemClock
 import android.view.accessibility.AccessibilityEvent
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.screenlate.app.AppServices
 import com.screenlate.app.R
 import com.screenlate.app.diagnostics.Diagnostics
 import com.screenlate.app.diagnostics.StatusNotifier
 import com.screenlate.app.model.ModelManager
+import com.screenlate.app.ocr.OcrActivity
+import com.screenlate.app.ocr.OcrBus
+import com.screenlate.app.ocr.OcrEvent
 import com.screenlate.app.overlay.BubbleAction
 import com.screenlate.app.overlay.FloatingBubble
 import com.screenlate.app.overlay.OverlayRenderer
@@ -66,6 +70,10 @@ class ScreenTranslateService : AccessibilityService() {
     private var screenItems: List<TextItem> = emptyList()
     private var refreshJob: Job? = null
     private var showJob: Job? = null
+
+    /** Set between the OCR tap and its result, so nothing of ours redraws into the screenshot. */
+    private var ocrRunning = false
+    private var ocrWatchdog: Job? = null
 
     /** The app in front, for "pause in this app" on the floating button. */
     private var foregroundPackage: String? = null
@@ -130,10 +138,13 @@ class ScreenTranslateService : AccessibilityService() {
                 if (state is ModelManager.State.Ready && !settings.economy) requestRefresh()
             }
         }
+        scope.launch {
+            OcrBus.events.collect(::onOcrEvent)
+        }
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
-        if (!connected || !settings.enabled || !screenOn) return
+        if (!connected || !settings.enabled || !screenOn || ocrRunning) return
         try {
             val packageName = event.packageName?.toString()
             if (packages.isSystem(packageName)) return
@@ -224,7 +235,7 @@ class ScreenTranslateService : AccessibilityService() {
             val mark = if (mode == settings.displayMode) "✓  " else "     "
             actions += BubbleAction(mark + label) { scope.launch { settingsRepository.update { it.copy(displayMode = mode) } } }
         }
-        actions += BubbleAction(getString(R.string.bubble_ocr_later), enabled = false) {}
+        actions += BubbleAction(getString(R.string.bubble_ocr), enabled = screenOn) { startOcr() }
         foregroundPackage?.takeIf { !packages.isSystem(it) && it !in settings.excludedPackages }?.let { target ->
             val paused = target in pausedPackages
             val label = getString(if (paused) R.string.bubble_resume_app else R.string.bubble_pause_app, appLabel(target))
@@ -242,6 +253,61 @@ class ScreenTranslateService : AccessibilityService() {
         if (!pausedPackages.remove(target)) pausedPackages += target
         packages.paused = pausedPackages.toSet()
         if (target in pausedPackages) stopWork() else if (!settings.economy) requestRefresh()
+    }
+
+    /** One-shot OCR: everything of ours hides first so it stays out of the screenshot. */
+    private fun startOcr() {
+        if (!connected) return
+        ocrRunning = true
+        stopWork()
+        bubble.hide()
+        // If the capture service dies without an event, translation must not stay stuck.
+        ocrWatchdog?.cancel()
+        ocrWatchdog = scope.launch {
+            delay(OCR_WATCHDOG_MS)
+            if (ocrRunning) onOcrEvent(OcrEvent.Failed("watchdog"))
+        }
+        try {
+            startActivity(Intent(this, OcrActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        } catch (e: RuntimeException) {
+            reportFailure(e)
+            onOcrEvent(OcrEvent.Failed(e.javaClass.simpleName))
+        }
+    }
+
+    private fun onOcrEvent(event: OcrEvent) {
+        ocrRunning = false
+        ocrWatchdog?.cancel()
+        when (event) {
+            is OcrEvent.Lines -> scope.launch { showOcrTranslations(event) }
+            OcrEvent.NoModel -> notifyOcr(R.string.ocr_no_model)
+            OcrEvent.SecureScreen -> notifyOcr(R.string.ocr_secure)
+            OcrEvent.NoText -> notifyOcr(R.string.ocr_no_text)
+            OcrEvent.Cancelled -> restoreBubble()
+            is OcrEvent.Failed -> notifyOcr(R.string.ocr_failed)
+        }
+    }
+
+    /** Shows translations over the lines OCR found; only a new tap or a screen change replaces them. */
+    private suspend fun showOcrTranslations(event: OcrEvent.Lines) {
+        if (!connected) return
+        lastMotionAt = 0L
+        screenItems = event.lines.map {
+            TextItem(it.key, it.text, it.bounds, foregroundPackage ?: "ocr", it.lineHeight)
+        }
+        translateScreen(screenItems)
+        Diagnostics.log("OCR: ${event.lines.size} строк на перевод, от нажатия ${event.millis} мс")
+        scheduleShow()
+        restoreBubble()
+    }
+
+    private fun notifyOcr(message: Int) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        restoreBubble()
+    }
+
+    private fun restoreBubble() {
+        if (connected && settings.showBubble) bubble.show(bubblePosition)
     }
 
     private fun openSettings() {
@@ -264,13 +330,13 @@ class ScreenTranslateService : AccessibilityService() {
     }
 
     private fun requestRefresh() {
-        if (!connected || !settings.enabled || !screenOn) return
+        if (!connected || !settings.enabled || !screenOn || ocrRunning) return
         refreshJob?.cancel()
         refreshJob = scope.launch { refresh() }
     }
 
     private suspend fun refresh() {
-        if (app.modelManager.readyDir() == null) {
+        if (app.modelManager.readyDir() == null || ocrRunning) {
             stopWork()
             return
         }
@@ -278,10 +344,7 @@ class ScreenTranslateService : AccessibilityService() {
         val screen = withContext(collectDispatcher) { collector.collect() }
         screenItems = screen.items
         val sentences = screen.items.flatMap { TextSegments.sentences(it.text) }.distinct()
-        app.repository.preload(sentences)
-        val missing = sentences.filter { app.repository.cached(it) == null }
-        renderAvailable()
-        queue.replace(missing)
+        val missing = translateScreen(screen.items)
         Diagnostics.onRefresh(
             windows = screen.windowCount,
             texts = screen.items.size,
@@ -292,6 +355,17 @@ class ScreenTranslateService : AccessibilityService() {
             packageName = screen.items.firstOrNull()?.packageName,
         )
         scheduleShow()
+    }
+
+    /** Runs every item's sentences through the caches and the queue, drawing whatever is ready.
+     * Returns the sentences that were not cached anywhere. */
+    private suspend fun translateScreen(items: List<TextItem>): List<String> {
+        val sentences = items.flatMap { TextSegments.sentences(it.text) }.distinct()
+        app.repository.preload(sentences)
+        val missing = sentences.filter { app.repository.cached(it) == null }
+        renderAvailable()
+        queue.replace(missing)
+        return missing
     }
 
     /** Draws every item whose sentences are all translated; the rest appear as the queue gets to them. */
@@ -334,5 +408,6 @@ class ScreenTranslateService : AccessibilityService() {
         const val QUIET_MS = 250L
         const val MAX_WAIT_MS = 1_000L
         const val SHOW_DELAY_MS = 300L
+        const val OCR_WATCHDOG_MS = 60_000L
     }
 }

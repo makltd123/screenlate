@@ -17,8 +17,8 @@ android {
         applicationId = "com.screenlate.app"
         minSdk = 26
         targetSdk = 34
-        versionCode = 4
-        versionName = "0.4.0"
+        versionCode = 5
+        versionName = "0.5.0"
 
         ndk {
             abiFilters += "arm64-v8a"
@@ -112,6 +112,9 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material3)
+
+    // OCR (stage 4): the bundled Latin recognizer, recognition runs fully offline.
+    implementation(libs.mlkit.text.recognition)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

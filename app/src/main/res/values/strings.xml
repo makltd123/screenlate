@@ -29,11 +29,18 @@
     <string name="mode_hint">Подсказка</string>
     <string name="mode_hint_body">Маленькая плашка под оригиналом, сам текст не закрывается.</string>
 
-    <string name="bubble_ocr_later">Перевести картинку (на этапе 4)</string>
+    <string name="bubble_ocr">Перевести картинку</string>
     <string name="bubble_pause_app">Пауза в «%1$s»</string>
     <string name="bubble_resume_app">Снять паузу в «%1$s»</string>
     <string name="bubble_full_text">Весь перевод на экране</string>
     <string name="bubble_settings">Настройки</string>
+
+    <string name="ocr_notification_channel">Перевод картинки</string>
+    <string name="ocr_notification_text">Распознаёт английский текст на экране…</string>
+    <string name="ocr_no_model">Сначала скачайте модель перевода: шаг 1 на главном экране.</string>
+    <string name="ocr_no_text">Английский текст на экране не найден.</string>
+    <string name="ocr_secure">Этот экран не даёт делать снимок, перевести картинку не получится.</string>
+    <string name="ocr_failed">Не получилось сделать снимок экрана. Попробуйте ещё раз.</string>
 
     <string name="settings_title">Настройки</string>
     <string name="settings_section_translation">Перевод</string>

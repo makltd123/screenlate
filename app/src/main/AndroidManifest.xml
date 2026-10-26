@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <!-- The one-shot OCR capture runs in a foreground service holding a MediaProjection. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
 
     <!-- Lists launchable apps for the exclusion picker and the floating button's "pause" item. -->
     <queries>
@@ -32,6 +35,15 @@
             </intent-filter>
         </activity>
 
+        <!-- Invisible trampoline that only runs the OCR capture permission dialog.
+             No noHistory: the system consent dialog is an activity on top of it, and the
+             result must land here. -->
+        <activity
+            android:name=".ocr.OcrActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:theme="@style/Theme.ScreenLate.Ocr" />
+
         <service
             android:name=".accessibility.ScreenTranslateService"
             android:exported="true"
@@ -58,6 +70,11 @@
                 android:name="android.service.quicksettings.TOGGLEABLE_TILE"
                 android:value="true" />
         </service>
+
+        <service
+            android:name=".ocr.OcrCaptureService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
     </application>
 
 </manifest>

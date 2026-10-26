@@ -6,12 +6,13 @@ ScreenLate is an Android app that translates English text on the screen of any a
 
 ## Status
 
-**Stage 2: real translation.** The app finds English text in any app and draws plaques with the Russian translation over it. Translation runs on the phone. The full specification is in [docs/SPEC.md](docs/SPEC.md) (in Russian).
+**Stage 4: OCR.** The app finds English text in any app and draws plaques with the Russian translation over it. Translation runs on the phone. For apps that do not expose their text (games, images), a one-shot screenshot mode recognises English text with ML Kit and translates it the same way. The full specification is in [docs/SPEC.md](docs/SPEC.md) (in Russian).
 
 - An accessibility service reads on-screen text. Passwords, input fields, the keyboard and the system UI are skipped.
 - Translation uses Opus-MT en→ru, exported to ONNX and quantized to int8 (about 97 MB, downloaded once on first run, then fully offline), on ONNX Runtime with a native SentencePiece tokenizer.
 - Translations are cached in memory and on disk, so text seen before shows up at once.
 - A single touch-transparent overlay draws the plaques and hides them while the screen scrolls.
+- "Translate a picture" in the floating button's menu takes one screenshot (MediaProjection, asked every time), waits until the screen stops changing, recognises English lines with ML Kit (bundled, offline) and shows the same plaques. Protected screens (FLAG_SECURE) get a clear message.
 - A Quick Settings tile switches translation on and off.
 - The main screen has a setup checklist and a "test translation" field.
 - A hidden diagnostics screen (long press on the version number) shows service events and timings and runs a model self-check. It never shows screen text.
@@ -44,6 +45,10 @@ The APK is built only in GitHub Actions ([`build.yml`](.github/workflows/build.y
 The model is not in the APK. [`convert-model.yml`](.github/workflows/convert-model.yml) runs [`scripts/convert_model.py`](scripts/convert_model.py): it exports [Helsinki-NLP/opus-mt-en-ru](https://huggingface.co/Helsinki-NLP/opus-mt-en-ru) to ONNX (encoder plus a merged decoder with KV cache), quantizes it to int8, checks 20 reference phrases against the original PyTorch model and publishes the zip to the `model-v1` release. The app downloads that exact file and checks its SHA-256 (see `gradle.properties`).
 
 Opus-MT models are by the Language Technology Research Group at the University of Helsinki and are released under the Apache License 2.0.
+
+### OCR
+
+Stage 4 adds screenshot translation. `com.google.mlkit:text-recognition` 16.0.1 (the bundled Latin variant) recognises the text fully offline; the Opus-MT model does the translating. The capture is one shot per tap of the floating button: a foreground service of type `mediaProjection` holds the projection only while the run lasts.
 
 ### Signing key
 

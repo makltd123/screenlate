@@ -35,3 +35,4 @@
 
 - AGP 9: Kotlin встроен, плагин `org.jetbrains.kotlin.android` не подключается. Версия Kotlin поднимается строкой `classpath` в корневом `build.gradle.kts`.
 - AGP 9 убрал старый variant API (`applicationVariants`). APK переименовывается в workflow.
+- OCR (этап 4): ML Kit `text-recognition` 16.0.1 (bundled, латиница) — распознавание офлайн, перевод по-прежнему Opus-MT. Захват: `OcrActivity` (трамплин для диалога MediaProjection) → `OcrCaptureService` (foreground типа `mediaProjection`), один снимок на нажатие, результат через `OcrBus` в службу. Android 14 требует запускать foreground до `getMediaProjection`.
